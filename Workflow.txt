@@ -1,0 +1,14 @@
+Workflow
+
+Dessa steg går en uppgift genom för att bli klar.
+
+1. Skapandet av uppgiften:
+	Uppgiften skapas och det bestäms hur den ska fungera. Om det är en funktion så ska det vara tydligt vilka parametrar och vilken output som finns, samt vad funktionen ska göra.
+2. Implementation:
+	Uppgiften ska implementeras och fungera som väntat.
+3. Testning:
+	Implementationen ska testas så att allt fungerar som väntat.
+4. Dokumentation:
+	Allt vara ska vara grundligt dokumenterat, både som kommentarer i koden samt som ett extern dokument.
+
+Feel free to edit as you please.
