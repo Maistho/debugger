@@ -1,0 +1,14 @@
+Android Studio How-To!
+
+How to checkout:
+Open Android Studio and select Check out from Version Control and select GitHub.
+Log in using your GitHub credentials.
+Choose to use Gradle to import.
+Use auto-import and default gradle wrapper.
+You now have the project in the IDE!
+
+How to commit your changes:
+After testing so that the new functions work, press Ctrl-K.
+Add a comment describing what you have changed.
+Press Commit (or Commit and Push if you want to push instantly).
+Now push the changes to GitHub, and we can all use the new functions!
