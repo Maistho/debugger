@@ -4,6 +4,7 @@ How to checkout:
 Open Android Studio and select Check out from Version Control and select GitHub.
 Log in using your GitHub credentials.
 Choose to use Gradle to import.
+Select debugger/app/build.gradle as Gradle Project.
 Use auto-import and default gradle wrapper.
 You now have the project in the IDE!
 
