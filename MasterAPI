@@ -1,0 +1,23 @@
+När man börjar med ett nytt problem så lägger man in specifikation för det man arbetar på i lämplig plats med
+förklaring på syfte, returnvärden samt parametrar.
+
+Server
+--------------------------------------------------
+- - - - - - - - - - - - - - - - - - - - - - - - - 
+  Klass - sammanfattning
+  
+    Metod - info
+    
+    Metod - info
+    
+- - - - - - - - - - - - - - - - - - - - - - - - - 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - 
+
+--------------------------------------------------
+Klient
+- - - - - - - - - - - - - - - - - - - - - - - - - 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - 
+
+- - - - - - - - - - - - - - - - - - - - - - - - - 
