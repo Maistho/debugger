@@ -1,0 +1,12 @@
+User databas i format
+UID: nick/google
+points_dict(problemid : points,...:...)
+google_token?
+[problemID,problemID,...,...]
+
+Problem databas i format
+ID
+code=string
+testfall
+tips
+scores[uid:[rank,points]] -top 10
