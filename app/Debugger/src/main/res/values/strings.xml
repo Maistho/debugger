@@ -11,7 +11,17 @@
         <item>Main Menu</item>
         <item>Solve New Bug</item>
         <item>Resume Previous Bug</item>
-        <item>Quit App</item>
     </string-array>
 
+    <string-array name="language_spinner">
+        <item>Python</item>
+        <item>Jawas</item>
+        <item>Seraphina</item>
+    </string-array>
+
+    <string-array name="difficulty_spinner">
+        <item>n00b</item>
+        <item>wannabe</item>
+        <item>1337 h4x0r</item>
+    </string-array>
 </resources>
