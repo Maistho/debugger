@@ -9,7 +9,7 @@
     <Switch
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Random bug?"
+        android:text="@string/bugpicker_switch"
         android:id="@+id/randomness_switch"
         android:layout_gravity="center"
         android:textOff="NO"
@@ -30,7 +30,7 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Language: "
+                android:text="@string/language_spinner_desc"
                 android:id="@+id/language_spinner_text" />
 
             <Spinner
@@ -47,7 +47,7 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="Difficulty: "
+                android:text="@string/difficulty_spinner_desc"
                 android:id="@+id/difficulty_spinner_text" />
 
             <Spinner
@@ -65,8 +65,9 @@
         android:orientation="vertical"></LinearLayout>
 
     <Button
+        android:id="@+id/new_bug_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Solve bug!" />
+        android:text="@string/new_bug_btn" />
 </LinearLayout>

@@ -7,6 +7,10 @@
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
+    <string name="bugpicker_switch">Random bug?</string>
+    <string name="language_spinner_desc">Language: </string>
+    <string name="difficulty_spinner_desc">Difficulty: </string>
+    <string name="new_bug_btn">Solve Bug!</string>
     <string-array name="nav_drawer_items">
         <item>Main Menu</item>
         <item>Solve New Bug</item>
