@@ -1,13 +1,14 @@
 package com.debugger;
 
 class Bug {
-    private final int id;
+    private final String id;
     private final String originalCode;
     private String currentCode;
 
-    public Bug(int id) {
+    public Bug(String id, String originalCode) {
         this.id = id;
-        originalCode = "#! /usr/bin/env python3.3\n" +
+        //this.originalCode = originalCode;
+        this.originalCode = "#! /usr/bin/env python3.3\n" +
                 "\n" +
                 "def alpha(n):\n" +
                 "    n = \"c\"+n[0][2]\n" +
@@ -21,15 +22,15 @@ class Bug {
         currentCode = originalCode;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getOriginalCode() {
-        return originalCode;
-    }
+    //don't camelCase id - it's ugly!
+    public String get_id() { return id; }
+    public String getOriginalCode() { return originalCode; }
     public String getCurrentCode() { return currentCode; }
-    public void setCurrentCode(String code) {
-        currentCode = code;
+
+    public void setCurrentCode(String code) { currentCode = code; }
+
+
+    public String toString() {
+        return id;
     }
 }
