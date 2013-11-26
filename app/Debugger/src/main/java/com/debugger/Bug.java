@@ -1,15 +1,13 @@
 package com.debugger;
 
-/**
- * ${FILENAME} created by maistho on 11/17/13.
- */
 class Bug {
     private final int id;
     private final String originalCode;
+    private String currentCode;
 
     public Bug(int id) {
         this.id = id;
-        this.originalCode = "#! /usr/bin/env python3.3\n" +
+        originalCode = "#! /usr/bin/env python3.3\n" +
                 "\n" +
                 "def alpha(n):\n" +
                 "    n = \"c\"+n[0][2]\n" +
@@ -20,6 +18,7 @@ class Bug {
                 "a = alpha([\"shave\"])\n" +
                 "#desired output is [[[],[[],'cave']]]\n" +
                 "print(a)";
+        currentCode = originalCode;
     }
 
     public int getId() {
@@ -28,5 +27,9 @@ class Bug {
 
     public String getOriginalCode() {
         return originalCode;
+    }
+    public String getCurrentCode() { return currentCode; }
+    public void setCurrentCode(String code) {
+        currentCode = code;
     }
 }

@@ -10,7 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.Switch;
+//import android.widget.Switch;
+import android.widget.ToggleButton;
 
 /**
  * ${FILENAME} created by maistho on 11/17/13.
@@ -48,7 +49,7 @@ public class BugpickerFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         difficulty_spinner.setAdapter(adapter);
 
-        Switch random_switch = (Switch) rootView.findViewById(R.id.randomness_switch);
+        ToggleButton random_switch = (ToggleButton) rootView.findViewById(R.id.randomness_switch);
         random_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
