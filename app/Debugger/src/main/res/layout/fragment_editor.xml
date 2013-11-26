@@ -12,6 +12,7 @@
         android:gravity="top"
         android:layout_gravity="bottom"
         android:background="#0000"
+        android:textColor="#00ff00"
         android:imeOptions="flagNoExtractUi"
         android:singleLine="false"
         android:scrollbars="vertical"

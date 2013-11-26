@@ -6,14 +6,23 @@
     android:paddingRight="16dp"
     android:orientation="vertical">
 
-    <Switch
+    <!--Switch
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/bugpicker_switch"
         android:id="@+id/randomness_switch"
         android:layout_gravity="center"
         android:textOff="NO"
-        android:textOn="YES" />
+        android:textOn="YES" /-->
+    <ToggleButton
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:text="@string/bugpicker_switch"
+        android:id="@+id/randomness_switch"
+        android:layout_gravity="center"
+        android:textOff="NO"
+        android:textOn="YES"/>
+            
 
     <LinearLayout
         android:id="@+id/random_bug"
