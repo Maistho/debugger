@@ -31,6 +31,7 @@ class Reception
     request_line = from_client.readline
     problemDB = ProblemDB.new
     playerDB = ScorePlayerDB.new
+    testplace = TestServer.new
 
     #convert request into function call by case
     #pProblem(id,code=string)
@@ -56,7 +57,7 @@ class Reception
           end
         end
 
-        response = problemDB.pSolution(callargs,scode)
+        response = testplace.pSolution(callargs,scode)
 
     #Requesting a random problem of x difficulty & y language
     when "randReq"
@@ -103,11 +104,6 @@ class ProblemDB
     def initialize
     end
 
-    #posts a solution
-    def pSolution(arg, code)
-        puts "pSolution found"
-        return ""
-    end
 
     def fetchRand(diff,lang)
         puts "fetchRand found"
@@ -121,6 +117,16 @@ class ProblemDB
     end
 end
 
+class TestServer
+    def initialize
+    end
+
+    #posts a solution
+    def pSolution(arg, code)
+        puts "pSolution found"
+        return ""
+    end
+end
 
 #testing placeholders
 class ScorePlayerDB
