@@ -4,11 +4,20 @@ förklaring på syfte, returnvärden samt parametrar.
 Server
 --------------------------------------------------
 - - - - - - - - - - - - - - - - - - - - - - - - - 
-  Klass - sammanfattning
+  Class Reception
+    #kommunicerar med klient och serverstruktur
   
-    Metod - info
+    def run(port)
+      #behöver körport
+      #startar server
+    return nil
     
-    Metod - info
+    def handlerequest(fromclientsocket)
+      #hanterar I/O till klienten
+      #avkodar anrop
+      #kör anrop till serverdelar
+      #svarar till klient
+    return nil
     
 - - - - - - - - - - - - - - - - - - - - - - - - - 
 
