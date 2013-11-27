@@ -67,7 +67,7 @@ public class BugpickerFragment extends Fragment {
         new_bug_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bug bug = getNewBug(0);
+                Bug bug = getNewBug("#F0A002");
                 Fragment fragment = EditorFragment.newInstance(bug);
                 // update the main content by replacing fragments
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -78,8 +78,13 @@ public class BugpickerFragment extends Fragment {
         });
         return rootView;
     }
+    //interface - require onAttach
+    //matchCriteriaBug (language, difficulty, ...);
+    //randomBug();
+    //specificBug();
 
-    private Bug getNewBug(int id) {
-        return new Bug(id);
+
+    private Bug getNewBug(String id) {
+        return new Bug(id, "placeholderCode");
     }
 }
