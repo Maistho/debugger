@@ -1,29 +1,28 @@
 package com.debugger;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+/**
+ * MainActivity
+ * The main activity - Coordinates the App's fragments
+ */
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        BugpickerFragment.OnBugPickedListener,
+        EditorFragment.OnEditorEventListener {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
+
+    // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+
+    // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
 
     @Override
@@ -41,27 +40,6 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        Fragment fragment;
-        switch (position) {
-            case 1:
-                fragment = BugpickerFragment.newInstance();
-                break;
-            default:
-                fragment = PlaceholderFragment.newInstance(position);
-                break;
-        }
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
-    }
-
-    void onSectionAttached(int number) {
-        mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
-    }
 
     void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -83,11 +61,13 @@ public class MainActivity extends ActionBarActivity
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Handle action bar item clicks here
+     * Clicks on the Home/Up button are handled automatically, as long as
+     * you specify a parent activity in AndroidManifest.xml
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
@@ -95,6 +75,11 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * swapMainFragment
+     * Swap current main fragment
+     */
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -102,45 +87,56 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
+
+
     /**
-     * A placeholder fragment containing a simple view.
+     * Callback methods for NavigationDrawerFragment
      */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        Fragment fragment;
+        switch (position) {
+            case 1:
+                fragment = BugpickerFragment.newInstance();
+                break;
+            default:
+                fragment = PlaceholderFragment.newInstance(position);
+                break;
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.placeholder_field);
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
+        // TODO: Replace with call to swapMainFragment
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
     }
+
+
+    /**
+     * Callback methods for PlaceholderFragment
+     */
+    void onSectionAttached(int number) {
+        mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
+    }
+
+
+    /**
+     * Callback methods for BugpickerFragment
+     */
+    @Override
+    public void onRandomBugPicked() {
+
+    }
+
+    @Override
+    public void onConditionedBugPicked() {
+
+    }
+
+
+    /**
+     * Callback methods for EditorFragment
+     */
+    //NYI
 }

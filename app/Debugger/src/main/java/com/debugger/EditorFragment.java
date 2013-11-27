@@ -1,5 +1,6 @@
 package com.debugger;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,30 @@ import android.widget.EditText;
 
 public class EditorFragment extends Fragment {
     private Bug bug;
+    private OnEditorEventListener callback;
+
+    /**
+     * Interface to communicate editor changes to the activity
+     * Activity must implement this interface!
+     */
+    public interface OnEditorEventListener {
+        //Callback interface - Add methods for activity communication here!
+    }
+
+    /**
+     * onAttach - Called when attached to activity
+     * Checks to make sure container implements callback interface
+     */
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            callback = (OnEditorEventListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+            + " must implement OnEditorEventListener");
+        }
+    }
 
     public EditorFragment() {
     }
