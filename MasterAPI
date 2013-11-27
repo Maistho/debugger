@@ -17,6 +17,7 @@ Server
       #avkodar anrop
       #kör anrop till serverdelar
       #svarar till klient
+      !Har tester i ServerProbe.rb
     return nil
     
 - - - - - - - - - - - - - - - - - - - - - - - - - 
