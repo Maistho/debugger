@@ -65,24 +65,25 @@ class Reception
         callargs[0][-1]=''
         callargs << from_client.readline
 
-        response = problemDB.randReq(callargs[0],callargs[1])
+        response = problemDB.fetchRand(callargs[0],callargs[1])
 
     #Requesting a problem of ID
     when "idReq"
         callargs << from_client.readline
 
-        response = problemDB.idReq(callargs[0])
+        response = problemDB.pProblem(callargs[0])
 
     #Fetch scores for client of ID
     when "getScores"
         callargs << from_client.readline
 
-        response = playerDB.getScores(callargs[0])
+        response = playerDB.pScores(callargs[0])
 
+    #Fetch leaderboard
     when "getLeaderboard"
         callargs = from_client.readline
 
-        response = playerDB.getLeaderboard(callargs[0])
+        response = playerDB.pLeaderboard(callargs[0])
 
     else
         puts "Failure to apprehend call"
@@ -97,37 +98,42 @@ class Reception
   end
 end
 
+#testing placeholders
 class ProblemDB
     def initialize
     end
 
+    #posts a solution
     def pSolution(arg, code)
         puts "pSolution found"
         return ""
     end
 
-    def randReq(diff,lang)
-        puts "randReq found"
+    def fetchRand(diff,lang)
+        puts "fetchRand found"
+        #p[id,code] = pProblem(id)
         return ""
     end
 
-    def idReq(id)
-        puts "idReq found"
+    def pProblem(id)
+        puts "pProblem found"
         return ""
     end
 end
 
+
+#testing placeholders
 class ScorePlayerDB
     def initialize
     end
 
-    def getScores(id)
-        puts "getScores found"
+    def pScores(id)
+        puts "pScores found"
         return ""
     end
 
-    def getLeaderboard(what)
-        puts "getLeaderboard found"
+    def pLeaderboard(what)
+        puts "pLeaderboard found"
         return ""
     end
 end
