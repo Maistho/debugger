@@ -28,6 +28,8 @@ class Reception
   end
   
   def handle_request from_client
+    request_line = from_client.readline
+    problemDB = PDB.new
 
     #convert request into function call by case
     #pProblem(id,code=string)
@@ -35,24 +37,69 @@ class Reception
     #pScores(id,[uid,score=int])
     #pLeaderboard([uid,score=int])
 
-    #request_line = from_client.readline
+    puts request_line
+
+    scode = ""
+    callargs = []
+    response = ""
+
+    case request_line.chomp
+    when "Post"
+        loop do
+          line = from_client.readline
+          if line.strip.empty?
+            break
+          else
+            scode << line
+          end
+        end
+
+        response = problemDB.pSolution(callargs,scode)
+
+
+    when "randReq"
+
+        callargs << from_client.readline(sep=",")
+        callargs[0][-1]=''
+        callargs << from_client.readline
+
+        response = problemDB.randReq(callargs[0],callargs[1])
+
+    when "idReq"
+        callargs = from_client.readline
+    when "getScores"
+        callargs = from_client.readline
+    when "getLeaderboard"
+        callargs = from_client.readline
+    else
+        puts "Failure to apprehend call"
+    end
+
     #verb = request_line[/^\w+/]
     #url = request_line[/^\w+\s+(\S+)/, 1]
-    #version = request_line[/HTTP\/(1\.\d)\s*$/, 1]
-    #uri = URI::parse url
-    ## Show what got requested
-    #puts((" %4s "%verb) + url)
-    #puts(url)
-
-    codebox = ''
-
-
-    from_client.write('Inte inne')
+    buff = "\r\n\r\n"
+    puts "responding"
+    from_client.write(buff)
+    puts "conn_end"
     # Close the sockets
     from_client.close
   end
 end
 
+class PDB
+    def initialize
+    end
+
+    def pSolution(arg, code)
+        puts "pSolution found"
+        return ""
+    end
+
+    def randReq(diff,lang)
+        puts "randReq found"
+        return ""
+    end
+end
 
 # Get parameters and start the server
 if ARGV.empty?

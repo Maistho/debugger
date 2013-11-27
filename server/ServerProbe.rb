@@ -10,7 +10,8 @@ sockaddr = Socket.pack_sockaddr_in(8008,'localhost')
 
 socket.connect(sockaddr)
 
-socket.write( "UDBQ smurfelina\r\n\r\n")
+socket.write( "randReq\n2,py\r\n\r\n" )
+#socket.write( "Post\ndef alpha(n)\n    a=n*5\n    return a\nend\r\n\r\n" )
 
 results = socket.read
 
