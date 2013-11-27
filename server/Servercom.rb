@@ -29,7 +29,8 @@ class Reception
   
   def handle_request from_client
     request_line = from_client.readline
-    problemDB = PDB.new
+    problemDB = ProblemDB.new
+    playerDB = ScorePlayerDB.new
 
     #convert request into function call by case
     #pProblem(id,code=string)
@@ -44,6 +45,7 @@ class Reception
     response = ""
 
     case request_line.chomp
+    #Posting a solution
     when "Post"
         loop do
           line = from_client.readline
@@ -56,7 +58,7 @@ class Reception
 
         response = problemDB.pSolution(callargs,scode)
 
-
+    #Requesting a random problem of x difficulty & y language
     when "randReq"
 
         callargs << from_client.readline(sep=",")
@@ -65,19 +67,28 @@ class Reception
 
         response = problemDB.randReq(callargs[0],callargs[1])
 
+    #Requesting a problem of ID
     when "idReq"
-        callargs = from_client.readline
+        callargs << from_client.readline
+
+        response = problemDB.idReq(callargs[0])
+
+    #Fetch scores for client of ID
     when "getScores"
-        callargs = from_client.readline
+        callargs << from_client.readline
+
+        response = playerDB.getScores(callargs[0])
+
     when "getLeaderboard"
         callargs = from_client.readline
+
+        response = playerDB.getLeaderboard(callargs[0])
+
     else
         puts "Failure to apprehend call"
     end
 
-    #verb = request_line[/^\w+/]
-    #url = request_line[/^\w+\s+(\S+)/, 1]
-    buff = "\r\n\r\n"
+    buff = "placeholding\r\n\r\n"
     puts "responding"
     from_client.write(buff)
     puts "conn_end"
@@ -86,7 +97,7 @@ class Reception
   end
 end
 
-class PDB
+class ProblemDB
     def initialize
     end
 
@@ -97,6 +108,26 @@ class PDB
 
     def randReq(diff,lang)
         puts "randReq found"
+        return ""
+    end
+
+    def idReq(id)
+        puts "idReq found"
+        return ""
+    end
+end
+
+class ScorePlayerDB
+    def initialize
+    end
+
+    def getScores(id)
+        puts "getScores found"
+        return ""
+    end
+
+    def getLeaderboard(what)
+        puts "getLeaderboard found"
         return ""
     end
 end
