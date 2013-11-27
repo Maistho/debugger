@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
+ * MainActivity
  * The main activity - Coordinates the App's fragments
  */
 public class MainActivity extends ActionBarActivity
@@ -17,13 +18,11 @@ public class MainActivity extends ActionBarActivity
         BugpickerFragment.OnBugPickedListener,
         EditorFragment.OnEditorEventListener {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
+
+    // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+
+    // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
 
     @Override
@@ -41,27 +40,6 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        Fragment fragment;
-        switch (position) {
-            case 1:
-                fragment = BugpickerFragment.newInstance();
-                break;
-            default:
-                fragment = PlaceholderFragment.newInstance(position);
-                break;
-        }
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
-    }
-
-    void onSectionAttached(int number) {
-        mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
-    }
 
     void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -83,11 +61,13 @@ public class MainActivity extends ActionBarActivity
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Handle action bar item clicks here
+     * Clicks on the Home/Up button are handled automatically, as long as
+     * you specify a parent activity in AndroidManifest.xml
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
@@ -97,16 +77,48 @@ public class MainActivity extends ActionBarActivity
 
 
     /**
-     * Swap current main fragment - Remove?
+     * swapMainFragment
+     * Swap current main fragment
      */
-    /*
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
     }
-    */
+
+
+
+    /**
+     * Callback methods for NavigationDrawerFragment
+     */
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        Fragment fragment;
+        switch (position) {
+            case 1:
+                fragment = BugpickerFragment.newInstance();
+                break;
+            default:
+                fragment = PlaceholderFragment.newInstance(position);
+                break;
+        }
+
+        // TODO: Replace with call to swapMainFragment
+        // update the main content by replacing fragments
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
+
+    /**
+     * Callback methods for PlaceholderFragment
+     */
+    void onSectionAttached(int number) {
+        mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
+    }
 
 
     /**
