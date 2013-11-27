@@ -1,21 +1,21 @@
 package com.debugger;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+/**
+ * The main activity - Coordinates the App's fragments
+ */
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        BugpickerFragment.OnBugPickedListener,
+        EditorFragment.OnEditorEventListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -95,11 +95,36 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * Swap current main fragment - Remove?
+     */
+    /*
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
     }
+    */
 
+
+    /**
+     * Callback methods for BugpickerFragment
+     */
+    @Override
+    public void onRandomBugPicked() {
+
+    }
+
+    @Override
+    public void onConditionedBugPicked() {
+
+    }
+
+
+    /**
+     * Callback methods for EditorFragment
+     */
+    //NYI
 }

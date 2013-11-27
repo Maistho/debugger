@@ -1,20 +1,17 @@
 package com.debugger;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.support.v4.app.Fragment;
 
-/**
- * Created by knarko on 11/26/13.
- */
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends android.support.v4.app.Fragment {
+public class PlaceholderFragment extends Fragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.

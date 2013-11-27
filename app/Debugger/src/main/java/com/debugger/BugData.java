@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by knarko on 11/26/13.
  * BugData - Handles database removal, insertion and object creation
  */
 public class BugData {

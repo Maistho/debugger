@@ -1,5 +1,6 @@
 package com.debugger;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,17 +15,75 @@ import android.widget.Spinner;
 import android.widget.ToggleButton;
 
 /**
- * ${FILENAME} created by maistho on 11/17/13.
- */
-
-/**
- * A fragment containing the bugpicker view
+ * Fragment containing the bugpicker view
  */
 public class BugpickerFragment extends Fragment {
+    /**
+     * Currently available languages
+     */
+    public enum Language {
+        PYTHON2 ("Python 2.7", "2.7.6");
+        /*
+        PYTHON3 ("Python 3.3", "3.3.3"),
+        JAVA ("Java 7", "1.7.45"),
+        CPP ("C++11", "C++11"),
+        RUBY ("Ruby 2.0", "2.0.0-p353");
+        */
 
-    private BugpickerFragment() {
+        private String name;
+        private String version;
+
+        Language(String name, String version) {
+            this.name = name;
+            this.version = version;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String toString() {
+            return name + " - " + version;
+        }
     }
 
+
+    private OnBugPickedListener callback; //callback to container activity
+
+    /**
+     * Interface to communicate bug selection to the activity
+     * Activity must implement this interface!
+     */
+    public interface OnBugPickedListener {
+        public void onRandomBugPicked();
+        public void onConditionedBugPicked();
+        //public void onSpecificBugPicked(String); //NYI - Select bug by ID only
+    }
+
+    /**
+     * onAttach - Called when attached to activity
+     * Checks to make sure container implements callback interface
+     */
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            callback = (OnBugPickedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                + " must implement OnBugPickedListener");
+        }
+    }
+
+    /**
+     * BugpickerFragment
+     */
+    private BugpickerFragment() {}
+
+    /**
+     *
+     * @return Newly created fragment
+     */
     public static BugpickerFragment newInstance() {
         BugpickerFragment fragment = new BugpickerFragment();
         Bundle args = new Bundle();
@@ -78,10 +137,6 @@ public class BugpickerFragment extends Fragment {
         });
         return rootView;
     }
-    //interface - require onAttach
-    //matchCriteriaBug (language, difficulty, ...);
-    //randomBug();
-    //specificBug();
 
 
     private Bug getNewBug(String id) {
