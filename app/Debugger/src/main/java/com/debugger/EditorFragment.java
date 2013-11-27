@@ -15,9 +15,11 @@ public class EditorFragment extends Fragment {
     /**
      * Interface to communicate editor changes to the activity
      * Activity must implement this interface!
+     *
+     * TODO: Implement callback functions for EditorFragment
      */
     public interface OnEditorEventListener {
-        //Callback interface - Add methods for activity communication here!
+
     }
 
     /**
@@ -35,9 +37,19 @@ public class EditorFragment extends Fragment {
         }
     }
 
-    public EditorFragment() {
-    }
+    /**
+     * Constructor for new EditorFragments
+     */
+    public EditorFragment() {}
 
+    /**
+     * newInstance
+     * @param bug - Bug to edit
+     * @return - newly created EditorFragment
+     *
+     * TODO: Set bug on existing fragment with separate method?
+     * Allows reusing of one EditorFragment
+     */
     public static Fragment newInstance(Bug bug) {
         EditorFragment fragment = new EditorFragment();
         fragment.bug = bug;

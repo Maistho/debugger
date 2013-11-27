@@ -95,6 +95,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment;
+
         switch (position) {
             case 1:
                 fragment = BugpickerFragment.newInstance();
@@ -104,12 +105,7 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
 
-        // TODO: Replace with call to swapMainFragment
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
+        swapMainFragment(fragment);
     }
 
 
@@ -122,13 +118,30 @@ public class MainActivity extends ActionBarActivity
 
 
     /**
-     * Callback methods for BugpickerFragment
+     * Implements BugpickerFragment.OnBugPickedListener
+     * Starts a new EditorFragment with a random bug
+     *
+     * TODO: Currently placeholder, server communication needed.
+     *
+     * TODO?: Is a new instance of EditorFragment needed?
+     * What happens with the old EditorFragment if a new bug is selected?
+     * Can the bug within an existing EditorFragment be replaced?
      */
     @Override
     public void onRandomBugPicked() {
-
+        Bug bug = new Bug("id", "placeholderCode");
+        swapMainFragment(EditorFragment.newInstance(bug));
     }
 
+    /**
+     * Implements BugpickerFragment.OnBugPickedListener
+     * Starts a new EditorFragment with a conditioned bug
+     *
+     * TODO: Server communication
+     * TODO: Language and difficulty using BugpickerFragment.Language (and .Difficulty (NYI))
+     *
+     * TODO?: Is a new instance of EditorFragment needed? - see onRandomBugPicked()
+     */
     @Override
     public void onConditionedBugPicked() {
 
