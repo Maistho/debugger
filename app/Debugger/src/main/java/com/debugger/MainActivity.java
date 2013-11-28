@@ -15,8 +15,8 @@ import android.view.MenuItem;
  */
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        BugpickerFragment.OnBugPickedListener,
-        EditorFragment.OnEditorEventListener {
+        BugpickerFragment.BugpickerListener,
+        EditorFragment.EditorListener {
 
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -68,17 +68,17 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        /*switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
 
     /**
      * swapMainFragment
-     * Swap current main fragment
+     * @param fragment - new main fragment
      */
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -95,6 +95,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment;
+
         switch (position) {
             case 1:
                 fragment = BugpickerFragment.newInstance();
@@ -104,39 +105,55 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
 
-        // TODO: Replace with call to swapMainFragment
-        // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
+        swapMainFragment(fragment);
     }
 
 
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
     /**
-     * Callback methods for PlaceholderFragment
+     * Callback method for PlaceholderFragment
      */
     void onSectionAttached(int number) {
         mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
     }
 
 
+
     /**
-     * Callback methods for BugpickerFragment
+     * Implements BugpickerFragment.BugpickerListener
+     * Starts a new EditorFragment with a random bug
+     *
+     * TODO: Currently placeholder, server communication needed.
+     *
+     * TODO?: Is a new instance of EditorFragment needed?
+     * What happens with the old EditorFragment if a new bug is selected?
+     * Can the bug within an existing EditorFragment be replaced?
      */
     @Override
     public void onRandomBugPicked() {
-
+        Bug bug = new Bug("A3F6E0", "placeholderCode");
+        swapMainFragment(EditorFragment.newInstance(bug));
     }
 
+    /**
+     * Implements BugpickerFragment.BugpickerListener
+     * Starts a new EditorFragment with a conditioned bug
+     *
+     * TODO: Server communication
+     * TODO: Language and difficulty using BugpickerFragment.Language (and .Difficulty (NYI))
+     *
+     * TODO?: Is a new instance of EditorFragment needed? - see onRandomBugPicked()
+     */
     @Override
     public void onConditionedBugPicked() {
 
     }
 
-
     /**
      * Callback methods for EditorFragment
+     * TODO: NYI
      */
-    //NYI
 }
