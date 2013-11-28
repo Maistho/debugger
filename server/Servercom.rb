@@ -26,7 +26,7 @@ class Reception
       puts 'Quitting.'
     end
   end
-  
+
   def handle_request from_client
     request_line = from_client.readline
     problemDB = ProblemDB.new
