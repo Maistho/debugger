@@ -1,5 +1,8 @@
 package com.debugger;
 
+//TODO: Add information about language - break out enum from BugpickerFragment?
+//Usages: toString etc showing language+id
+//        future - syntax highlighting
 class Bug {
     private final String id;
     private final String originalCode;

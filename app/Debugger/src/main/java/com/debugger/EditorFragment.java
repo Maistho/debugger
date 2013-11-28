@@ -51,7 +51,7 @@ public class EditorFragment extends Fragment {
         switch(item.getItemId()) {
             case MENU_SUBMIT:
                 //TODO: Placeholder action for submit button
-                Toast.makeText(getActivity(), "Submit code", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Submit code - NYI", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

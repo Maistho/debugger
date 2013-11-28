@@ -87,7 +87,11 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        //Move the activity to the background
+        moveTaskToBack(true);
+    }
 
     /**
      * Callback methods for NavigationDrawerFragment

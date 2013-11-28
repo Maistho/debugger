@@ -24,6 +24,7 @@ public class BugpickerFragment extends Fragment
 
     /**
      * Currently available languages
+     * TODO: Break out
      */
     public enum Language {
         PYTHON2 ("Python 2.7", "2.7.6");
