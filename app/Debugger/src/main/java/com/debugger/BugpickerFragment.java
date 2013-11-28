@@ -3,12 +3,10 @@ package com.debugger;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 //import android.widget.Switch;
@@ -22,7 +20,7 @@ public class BugpickerFragment extends Fragment
         implements View.OnClickListener {
 
     //callback to container activity
-    private OnBugPickedListener callback;
+    private BugpickerListener callback;
 
     /**
      * Currently available languages
@@ -58,10 +56,11 @@ public class BugpickerFragment extends Fragment
      * Interface to communicate bug selection to the activity
      * Activity must implement this interface!
      */
-    public interface OnBugPickedListener {
-        public void onRandomBugPicked();
+    public interface BugpickerListener {
+        void setTitle(String title);
+        void onRandomBugPicked();
         // TODO: Add arguments for language and difficulty
-        public void onConditionedBugPicked();
+        void onConditionedBugPicked();
         // TODO: Specific bug picker
         //public void onSpecificBugPicked(String);
     }
@@ -70,15 +69,18 @@ public class BugpickerFragment extends Fragment
      * onAttach - Called when attached to activity
      * Checks to make sure container implements callback interface
      */
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         try {
-            callback = (OnBugPickedListener) activity;
+            callback = (BugpickerListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                + " must implement OnBugPickedListener");
+                + " must implement BugpickerListener");
         }
+        ((MainActivity) activity).setTitle("New bug");
+
     }
 
     /**

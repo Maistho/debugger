@@ -15,8 +15,8 @@ import android.view.MenuItem;
  */
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        BugpickerFragment.OnBugPickedListener,
-        EditorFragment.OnEditorEventListener {
+        BugpickerFragment.BugpickerListener,
+        EditorFragment.EditorListener {
 
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -68,17 +68,17 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        /*switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 
 
     /**
      * swapMainFragment
-     * Swap current main fragment
+     * @param fragment - new main fragment
      */
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -109,16 +109,21 @@ public class MainActivity extends ActionBarActivity
     }
 
 
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
     /**
-     * Callback methods for PlaceholderFragment
+     * Callback method for PlaceholderFragment
      */
     void onSectionAttached(int number) {
         mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
     }
 
 
+
     /**
-     * Implements BugpickerFragment.OnBugPickedListener
+     * Implements BugpickerFragment.BugpickerListener
      * Starts a new EditorFragment with a random bug
      *
      * TODO: Currently placeholder, server communication needed.
@@ -129,12 +134,12 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     public void onRandomBugPicked() {
-        Bug bug = new Bug("id", "placeholderCode");
+        Bug bug = new Bug("A3F6E0", "placeholderCode");
         swapMainFragment(EditorFragment.newInstance(bug));
     }
 
     /**
-     * Implements BugpickerFragment.OnBugPickedListener
+     * Implements BugpickerFragment.BugpickerListener
      * Starts a new EditorFragment with a conditioned bug
      *
      * TODO: Server communication
@@ -147,9 +152,8 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-
     /**
      * Callback methods for EditorFragment
+     * TODO: NYI
      */
-    //NYI
 }
