@@ -28,6 +28,10 @@ class Reception
   end
   
   def handle_request from_client
+    request_line = from_client.readline
+    problemDB = ProblemDB.new
+    playerDB = ScorePlayerDB.new
+    testplace = TestServer.new
 
     #convert request into function call by case
     #pProblem(id,code=string)
@@ -35,24 +39,110 @@ class Reception
     #pScores(id,[uid,score=int])
     #pLeaderboard([uid,score=int])
 
-    #request_line = from_client.readline
-    #verb = request_line[/^\w+/]
-    #url = request_line[/^\w+\s+(\S+)/, 1]
-    #version = request_line[/HTTP\/(1\.\d)\s*$/, 1]
-    #uri = URI::parse url
-    ## Show what got requested
-    #puts((" %4s "%verb) + url)
-    #puts(url)
+    puts request_line
 
-    codebox = ''
+    scode = ""
+    callargs = []
+    response = ""
 
+    case request_line.chomp
+    #Posting a solution
+    when "Post"
+        loop do
+          line = from_client.readline
+          if line.strip.empty?
+            break
+          else
+            scode << line
+          end
+        end
 
-    from_client.write('Inte inne')
+        response = testplace.pSolution(callargs,scode)
+
+    #Requesting a random problem of x difficulty & y language
+    when "randReq"
+
+        callargs << from_client.readline(sep=",")
+        callargs[0][-1]=''
+        callargs << from_client.readline
+
+        response = problemDB.fetchRand(callargs[0],callargs[1])
+
+    #Requesting a problem of ID
+    when "idReq"
+        callargs << from_client.readline
+
+        response = problemDB.pProblem(callargs[0])
+
+    #Fetch scores for client of ID
+    when "getScores"
+        callargs << from_client.readline
+
+        response = playerDB.pScores(callargs[0])
+
+    #Fetch leaderboard
+    when "getLeaderboard"
+        callargs = from_client.readline
+
+        response = playerDB.pLeaderboard(callargs[0])
+
+    else
+        puts "Failure to apprehend call"
+    end
+
+    buff = "placeholding\r\n\r\n"
+    puts "responding"
+    from_client.write(buff)
+    puts "conn_end"
     # Close the sockets
     from_client.close
   end
 end
 
+#testing placeholders
+class ProblemDB
+    def initialize
+    end
+
+
+    def fetchRand(diff,lang)
+        puts "fetchRand found"
+        #p[id,code] = pProblem(id)
+        return ""
+    end
+
+    def pProblem(id)
+        puts "pProblem found"
+        return ""
+    end
+end
+
+class TestServer
+    def initialize
+    end
+
+    #posts a solution
+    def pSolution(arg, code)
+        puts "pSolution found"
+        return ""
+    end
+end
+
+#testing placeholders
+class ScorePlayerDB
+    def initialize
+    end
+
+    def pScores(id)
+        puts "pScores found"
+        return ""
+    end
+
+    def pLeaderboard(what)
+        puts "pLeaderboard found"
+        return ""
+    end
+end
 
 # Get parameters and start the server
 if ARGV.empty?

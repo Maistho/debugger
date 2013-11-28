@@ -17,12 +17,42 @@ Server
       #avkodar anrop
       #kör anrop till serverdelar
       #svarar till klient
+      !Har tester i ServerProbe.rb
     return nil
     
 - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+  Class ScorePlayerDB
+    #loggar spelare och poäng
+    
+    def pScores(id)
+      #letar upp poäng för användare med id
+    return [?]
+    
+    def pLeaderboard(what)
+      #tbd
+    return [?]
+    
 - - - - - - - - - - - - - - - - - - - - - - - - - 
-
+  Class ProblemDB
+    #problemdatabas
+    
+    def fetchRand(diff,lang)
+      #plockar ut ett slumpid
+    return ?nil
+    
+    def pProblem(id)
+      #returnerar en bug
+    return ?bug
+- - - - - - - - - - - - - - - - - - - - - - - - - 
+  Class TestServer
+    #utvärdera, kompilera, och köra kod
+    
+    def pSolution(uid,code)
+      #ska även skicka vidare poängförändringar
+      #till ScorePlayerDB
+    return [?]
+    
 --------------------------------------------------
 Klient
 - - - - - - - - - - - - - - - - - - - - - - - - - 
