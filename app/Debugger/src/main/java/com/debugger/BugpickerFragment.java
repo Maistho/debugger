@@ -18,38 +18,21 @@ import android.widget.ToggleButton;
  */
 public class BugpickerFragment extends Fragment
         implements View.OnClickListener {
+    private static final String TITLE = "New Bug";
+    private BugpickerListener callback; //callback to activity
 
-    //callback to container activity
-    private BugpickerListener callback;
 
-    /**
-     * Currently available languages
-     * TODO: Break out
-     */
-    public enum Language {
-        PYTHON2 ("Python 2.7", "2.7.6");
+    public BugpickerFragment() {}
+
+    /*TODO: Before this method is called, check if a BF already exists
+      TODO: (see EditorFragment creation for reference)*/
+    public static BugpickerFragment newInstance() {
+        BugpickerFragment fragment = new BugpickerFragment();
         /*
-        PYTHON3 ("Python 3.3", "3.3.3"),
-        JAVA ("Java 7", "1.7.45"),
-        CPP ("C++11", "C++11"),
-        RUBY ("Ruby 2.0", "2.0.0-p353");
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
         */
-
-        private String name;
-        private String version;
-
-        Language(String name, String version) {
-            this.name = name;
-            this.version = version;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String toString() {
-            return name + " - " + version;
-        }
+        return fragment;
     }
 
 
@@ -60,10 +43,10 @@ public class BugpickerFragment extends Fragment
     public interface BugpickerListener {
         void setTitle(String title);
         void onRandomBugPicked();
+        //void onConditionedBugPicked(String language, String difficulty);
         // TODO: Add arguments for language and difficulty
-        void onConditionedBugPicked();
-        // TODO: Specific bug picker
         //public void onSpecificBugPicked(String);
+        // TODO: Specific bug picker
     }
 
     /**
@@ -80,25 +63,9 @@ public class BugpickerFragment extends Fragment
             throw new ClassCastException(activity.toString()
                 + " must implement BugpickerListener");
         }
-        ((MainActivity) activity).setTitle("New bug");
-
     }
 
-    /**
-     * Constructor for new BugpickerFragments
-     */
-    private BugpickerFragment() {}
 
-    /**
-     * newInstance
-     * @return Newly created fragment
-     */
-    public static BugpickerFragment newInstance() {
-        BugpickerFragment fragment = new BugpickerFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,7 +73,7 @@ public class BugpickerFragment extends Fragment
 
         final View rootView = inflater.inflate(R.layout.fragment_bugpicker, container, false);
 
-        // TODO: replace content with enum Language (top of this file)
+        // TODO: replace content with enum Language
         Spinner language_spinner = (Spinner) rootView.findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.language_spinner, android.R.layout.simple_spinner_item);
@@ -138,6 +105,7 @@ public class BugpickerFragment extends Fragment
         // Set new_bug_btn onClick handler to this.onClick(View)
         rootView.findViewById(R.id.new_bug_btn).setOnClickListener(this);
 
+        callback.setTitle(TITLE);
         return rootView;
     }
 
@@ -151,9 +119,11 @@ public class BugpickerFragment extends Fragment
                  * onConditionedBugPicked, and onSpecificBugPicked
                  */
                 callback.onRandomBugPicked();
+                //callback.onConditionedBugPicked(language, difficulty);
+                //callback.onSpecificBugPicked(id);
                 break;
             default:
-                // TODO: throw exception - no handler for View v
+                //No handler for View
                 break;
         }
     }
