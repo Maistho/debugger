@@ -9,15 +9,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-/**
- * MainActivity
- * The main activity - Coordinates the App's fragments
- */
+
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         BugpickerFragment.BugpickerListener,
         EditorFragment.EditorListener {
 
+    private static final int NEW_BUG = 0;
+    private static final int RESUME_BUG = 1;
+    private static final int SETTINGS = 2;
 
     // Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -76,21 +76,15 @@ public class MainActivity extends ActionBarActivity
     }
 
 
-    /**
-     * swapMainFragment
-     * @param fragment - new main fragment
-     */
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
+                .replace(R.id.container, fragment).addToBackStack(null)
                 .commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        //Move the activity to the background
-        moveTaskToBack(true);
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     /**
@@ -113,17 +107,12 @@ public class MainActivity extends ActionBarActivity
     }
 
 
-    public void setTitle(String title) {
-        mTitle = title;
-    }
-
     /**
      * Callback method for PlaceholderFragment
      */
     void onSectionAttached(int number) {
         mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
     }
-
 
 
     /**
@@ -138,22 +127,15 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     public void onRandomBugPicked() {
-        Bug bug = new Bug("A3F6E0", "placeholderCode");
-        swapMainFragment(EditorFragment.newInstance(bug));
-    }
+        Bug bug = new Bug("A3F6E0", Language.PYTHON2, "placeholderCode");
 
-    /**
-     * Implements BugpickerFragment.BugpickerListener
-     * Starts a new EditorFragment with a conditioned bug
-     *
-     * TODO: Server communication
-     * TODO: Language and difficulty using BugpickerFragment.Language (and .Difficulty (NYI))
-     *
-     * TODO?: Is a new instance of EditorFragment needed? - see onRandomBugPicked()
-     */
-    @Override
-    public void onConditionedBugPicked() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment f = fm.findFragmentById(R.id.editor);
+        if (f == null) {
+            f = EditorFragment.newInstance(bug);
+        }
 
+        swapMainFragment(f);
     }
 
     /**
