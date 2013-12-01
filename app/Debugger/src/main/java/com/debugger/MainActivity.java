@@ -75,7 +75,10 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * TODO: Handle backStack better - don't add everything
+     * Perhaps don't add bugpicker fragment, to prevent accidental creation of new bug
+     */
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -95,8 +98,14 @@ public class MainActivity extends ActionBarActivity
         Fragment fragment;
 
         switch (position) {
-            case 1:
+            case 0:
                 fragment = BugpickerFragment.newInstance();
+                break;
+            case 1:
+                fragment = PlaceholderFragment.newInstance(position);
+                break;
+            case 2:
+                fragment = PlaceholderFragment.newInstance(position);
                 break;
             default:
                 fragment = PlaceholderFragment.newInstance(position);
@@ -127,12 +136,14 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     public void onRandomBugPicked() {
-        Bug bug = new Bug("A3F6E0", Language.PYTHON2, "placeholderCode");
+        Bug bug = new Bug("A3F6E0", Language.PYTHON2, "placeholderCode()");
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment f = fm.findFragmentById(R.id.editor);
+        Fragment f =  fm.findFragmentById(R.id.editor);
         if (f == null) {
             f = EditorFragment.newInstance(bug);
+        } else {
+            ((EditorFragment) f).setBug(bug);
         }
 
         swapMainFragment(f);

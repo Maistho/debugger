@@ -25,7 +25,7 @@ class Bug implements Parcelable {
                 "a = alpha([\"shave\"])\n" +
                 "#desired output is [[[],[[],'cave']]]\n" +
                 "print(a)";
-        currentCode = originalCode;
+        currentCode = this.originalCode;
     }
 
     public void setCurrentCode(String code) { currentCode = code; }

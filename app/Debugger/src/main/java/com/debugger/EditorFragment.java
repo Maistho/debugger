@@ -35,6 +35,11 @@ public class EditorFragment extends Fragment {
         return fragment;
     }
 
+    public void setBug(Bug bug) {
+        //TODO: save old bug
+        this.bug = bug;
+    }
+
     /**
      * Make sure container implements callback interface
      */
