@@ -12,14 +12,14 @@
     <string name="difficulty_spinner_desc">Difficulty: </string>
     <string name="new_bug_btn">Solve Bug!</string>
     <string-array name="nav_drawer_items">
-        <item>Main Menu</item>
-        <item>Solve New Bug</item>
-        <item>Resume Previous Bug</item>
+        <item>New Bug</item>
+        <item>Resume Bug</item>
+        <item>Settings</item>
     </string-array>
 
     <string-array name="language_spinner">
         <item>Python</item>
-        <item>Jawas</item>
+        <item>Java</item>
         <item>Seraphina</item>
     </string-array>
 
