@@ -3,110 +3,90 @@ package com.debugger;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 //import android.widget.Switch;
 import android.widget.ToggleButton;
 
+
 /**
  * Fragment containing the bugpicker view
  */
-public class BugpickerFragment extends Fragment {
-    /**
-     * Currently available languages
-     */
-    public enum Language {
-        PYTHON2 ("Python 2.7", "2.7.6");
+public class BugpickerFragment extends Fragment
+        implements View.OnClickListener {
+    private static final String TITLE = "New Bug";
+    private BugpickerListener callback; //callback to activity
+
+
+    public BugpickerFragment() {}
+
+    /*TODO: Before this method is called, check if a BF already exists
+      TODO: (see EditorFragment creation for reference)*/
+    public static BugpickerFragment newInstance() {
+        BugpickerFragment fragment = new BugpickerFragment();
         /*
-        PYTHON3 ("Python 3.3", "3.3.3"),
-        JAVA ("Java 7", "1.7.45"),
-        CPP ("C++11", "C++11"),
-        RUBY ("Ruby 2.0", "2.0.0-p353");
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
         */
-
-        private String name;
-        private String version;
-
-        Language(String name, String version) {
-            this.name = name;
-            this.version = version;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String toString() {
-            return name + " - " + version;
-        }
+        return fragment;
     }
 
-
-    private OnBugPickedListener callback; //callback to container activity
 
     /**
      * Interface to communicate bug selection to the activity
      * Activity must implement this interface!
      */
-    public interface OnBugPickedListener {
-        public void onRandomBugPicked();
-        public void onConditionedBugPicked();
-        //public void onSpecificBugPicked(String); //NYI - Select bug by ID only
+    public interface BugpickerListener {
+        void setTitle(String title);
+        void onRandomBugPicked();
+        //void onConditionedBugPicked(String language, String difficulty);
+        // TODO: Add arguments for language and difficulty
+        //public void onSpecificBugPicked(String);
+        // TODO: Specific bug picker
     }
 
     /**
      * onAttach - Called when attached to activity
      * Checks to make sure container implements callback interface
      */
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
         try {
-            callback = (OnBugPickedListener) activity;
+            callback = (BugpickerListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                + " must implement OnBugPickedListener");
+                + " must implement BugpickerListener");
         }
     }
 
-    /**
-     * BugpickerFragment
-     */
-    private BugpickerFragment() {}
 
-    /**
-     *
-     * @return Newly created fragment
-     */
-    public static BugpickerFragment newInstance() {
-        BugpickerFragment fragment = new BugpickerFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         final View rootView = inflater.inflate(R.layout.fragment_bugpicker, container, false);
 
+        // TODO: replace content with enum Language
         Spinner language_spinner = (Spinner) rootView.findViewById(R.id.language_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.language_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         language_spinner.setAdapter(adapter);
 
+        // TODO: replace content with enum Difficulty (NYI)
         Spinner difficulty_spinner = (Spinner) rootView.findViewById(R.id.difficulty_spinner);
         adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.difficulty_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         difficulty_spinner.setAdapter(adapter);
+
 
         ToggleButton random_switch = (ToggleButton) rootView.findViewById(R.id.randomness_switch);
         random_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -122,24 +102,30 @@ public class BugpickerFragment extends Fragment {
             }
         });
 
-        Button new_bug_btn = (Button) rootView.findViewById(R.id.new_bug_btn);
-        new_bug_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bug bug = getNewBug("#F0A002");
-                Fragment fragment = EditorFragment.newInstance(bug);
-                // update the main content by replacing fragments
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, fragment)
-                        .commit();
-            }
-        });
+        // Set new_bug_btn onClick handler to this.onClick(View)
+        rootView.findViewById(R.id.new_bug_btn).setOnClickListener(this);
+
+        callback.setTitle(TITLE);
         return rootView;
     }
 
-
-    private Bug getNewBug(String id) {
-        return new Bug(id, "placeholderCode");
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.new_bug_btn:
+                /**
+                 * TODO: Lift data from Language and Difficulty selectors
+                 * Use Language and Difficulty to decide between onRandomBugPicked,
+                 * onConditionedBugPicked, and onSpecificBugPicked
+                 */
+                callback.onRandomBugPicked();
+                //callback.onConditionedBugPicked(language, difficulty);
+                //callback.onSpecificBugPicked(id);
+                break;
+            default:
+                //No handler for View
+                break;
+        }
     }
+
 }

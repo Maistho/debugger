@@ -5,9 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by knarko on 11/26/13.
+ * TODO: add language column
  */
-public class SQLiteHelper extends SQLiteOpenHelper{
+/*public class SQLiteHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "bugs.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -39,3 +39,4 @@ public class SQLiteHelper extends SQLiteOpenHelper{
         //Do nothing
     }
 }
+*/

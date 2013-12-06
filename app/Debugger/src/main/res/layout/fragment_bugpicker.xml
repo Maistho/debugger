@@ -20,8 +20,11 @@
         android:text="@string/bugpicker_switch"
         android:id="@+id/randomness_switch"
         android:layout_gravity="center"
-        android:textOff="NO"
-        android:textOn="YES"/>
+        android:textOff="Random Bug?"
+        android:textOn="Random Bug?"/>
+
+        <!--android:textOff="NO"
+        android:textOn="YES"/-->
             
 
     <LinearLayout
