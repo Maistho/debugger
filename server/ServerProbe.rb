@@ -30,7 +30,7 @@ socket = Socket.new(AF_INET, SOCK_STREAM, 0)
 
 socket.connect(sockaddr)
 
-socket.write( "Post\ndef alpha(n)\n    a=n*5\n    return a\nend\r\n\r\n" )
+socket.write( "Post\npy0003\ndef alpha(n)\n    a=n*5\n    return a\nend\r\n\r\n" )
 
 results = socket.read
 

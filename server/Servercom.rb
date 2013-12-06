@@ -48,6 +48,7 @@ class Reception
     case request_line.chomp
     #Posting a solution
     when "Post"
+        callargs << from_client.readline
         loop do
           line = from_client.readline
           if line.strip.empty?
@@ -58,6 +59,7 @@ class Reception
         end
 
         response = testplace.pSolution(callargs,scode)
+        #returns
 
     #Requesting a random problem of x difficulty & y language
     when "randReq"
