@@ -2,6 +2,7 @@
 
 require 'socket'
 require 'uri'
+require 'JSON'
 
 
 class Reception
@@ -28,7 +29,6 @@ class Reception
   end
 
   def handle_request from_client
-    request_line = from_client.readline
     problemDB = ProblemDB.new
     playerDB = ScorePlayerDB.new
     testplace = TestServer.new
@@ -39,53 +39,44 @@ class Reception
     #pScores(id,[uid,score=int])
     #pLeaderboard([uid,score=int])
 
-    puts request_line
+    incoming = ""
 
-    scode = ""
-    callargs = []
+    loop do
+      if line.strip.empty?
+        break
+      else
+        incoming << line
+      end
+    end
+
+    JSONinc = JSON.generate(incoming,quirks=true)
+
     response = ""
 
-    case request_line.chomp
+    case JSONinc['method']
     #Posting a solution
     when "Post"
-        callargs << from_client.readline
-        loop do
-          line = from_client.readline
-          if line.strip.empty?
-            break
-          else
-            scode << line
-          end
-        end
 
-        response = testplace.pSolution(callargs,scode)
+        response = testplace.pSolution(JSONinc['id'],JSONinc['language'],JSONinc['code'])
         #returns
 
     #Requesting a random problem of x difficulty & y language
     when "randReq"
 
-        callargs << from_client.readline(sep=",")
-        callargs[0][-1]=''
-        callargs << from_client.readline
-
-        response = problemDB.fetchRand(callargs[0],callargs[1])
+        response = fetchRand(JSONinc['language'],JSONinc['difficulty'])
 
     #Requesting a problem of ID
     when "idReq"
-        callargs << from_client.readline
 
-        response = problemDB.pProblem(callargs[0])
+        response = problemDB.getProblem(JSONinc['id'])
 
     #Fetch scores for client of ID
     when "getScores"
-        callargs << from_client.readline
 
         response = playerDB.pScores(callargs[0])
 
     #Fetch leaderboard
     when "getLeaderboard"
-        callargs = from_client.readline
-
         response = playerDB.pLeaderboard(callargs[0])
 
     else
@@ -98,6 +89,10 @@ class Reception
     puts "conn_end"
     # Close the sockets
     from_client.close
+  end
+
+  def fetchRand
+    #todo make a randomizer upon lang&diff
   end
 end
 
