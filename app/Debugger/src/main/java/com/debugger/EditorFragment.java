@@ -56,6 +56,7 @@ public class EditorFragment extends Fragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (savedInstanceState != null)
             bug = savedInstanceState.getParcelable("bug");
 
