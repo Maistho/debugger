@@ -1,0 +1,8 @@
+#python language, file ending
+p:py;
+#difficulty, id
+	0
+		000
+		001
+	1
+		000
