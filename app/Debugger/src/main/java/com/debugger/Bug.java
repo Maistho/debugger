@@ -30,27 +30,23 @@ class Bug implements Parcelable {
 
     public void setCurrentCode(String code) { currentCode = code; }
 
-    public String get_id() { return id; }
-    public String getLanguage() { return language.toString(); }
+    public String getId() { return id; }
+    public Language getLanguage() { return language; }
     public String getOriginalCode() { return originalCode; }
     public String getCurrentCode() { return currentCode; }
 
 
     public String toString() {
-        return language.asString() + ": " + id;
+        return language.getName() + ": " + id;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(id);
+        out.writeString(language.toString());
         out.writeString(originalCode);
         out.writeString(currentCode);
-        out.writeString(language.toString());
     }
 
     public static final Creator<Bug> CREATOR = new Creator<Bug>() {
@@ -64,8 +60,13 @@ class Bug implements Parcelable {
 
     private Bug(Parcel in) {
         id = in.readString();
+        language = Language.valueOf(in.readString());
         originalCode = in.readString();
         currentCode = in.readString();
-        language = Language.valueOf(in.readString());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }
