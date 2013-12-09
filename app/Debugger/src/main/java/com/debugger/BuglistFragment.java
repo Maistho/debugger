@@ -25,6 +25,7 @@ public class BuglistFragment extends ListFragment {
 
     public interface BuglistListener {
         public void setTitle(String title);
+        public void onResumeBug(Bug bug);
     }
 
     public static BuglistFragment newInstance() {
@@ -70,6 +71,7 @@ public class BuglistFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        callback.onResumeBug(bugList.get(position));
         //swapmainfragment(ssksk, bug);
     }
 
