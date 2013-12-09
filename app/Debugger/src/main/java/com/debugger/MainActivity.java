@@ -11,8 +11,11 @@ import android.view.MenuItem;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        implements
+        NavigationDrawerFragment.NavigationDrawerCallbacks,
         BugpickerFragment.BugpickerListener,
+        BuglistFragment.BuglistListener,
+        SettingsFragment.SettingsListener,
         EditorFragment.EditorListener {
 
     private static final int NEW_BUG = 0;
@@ -82,7 +85,8 @@ public class MainActivity extends ActionBarActivity
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment).addToBackStack(null)
+                .replace(R.id.container, fragment)
+                //.addToBackStack(null)
                 .commit();
     }
 
@@ -98,29 +102,22 @@ public class MainActivity extends ActionBarActivity
         Fragment fragment;
 
         switch (position) {
-            case 0:
+            case NEW_BUG:
                 fragment = BugpickerFragment.newInstance();
+                swapMainFragment(fragment);
                 break;
-            case 1:
-                fragment = PlaceholderFragment.newInstance(position);
+            case RESUME_BUG:
+                fragment = BuglistFragment.newInstance();
+                swapMainFragment(fragment);
                 break;
-            case 2:
-                fragment = PlaceholderFragment.newInstance(position);
+            case SETTINGS:
+                fragment = SettingsFragment.newInstance();
+                swapMainFragment(fragment);
                 break;
             default:
-                fragment = PlaceholderFragment.newInstance(position);
                 break;
         }
 
-        swapMainFragment(fragment);
-    }
-
-
-    /**
-     * Callback method for PlaceholderFragment
-     */
-    void onSectionAttached(int number) {
-        mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
     }
 
 
