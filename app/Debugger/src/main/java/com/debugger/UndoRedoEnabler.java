@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-
+//TODO: Check timing
 public class UndoRedoEnabler {
     private final List<Edit> history = new LinkedList<Edit>();
     private ListIterator<Edit> historyIterator = history.listIterator();

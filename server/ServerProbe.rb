@@ -30,7 +30,8 @@ socket = Socket.new(AF_INET, SOCK_STREAM, 0)
 
 socket.connect(sockaddr)
 
-socket.write( "Post\ndef alpha(n)\n    a=n*5\n    return a\nend\r\n\r\n" )
+socket.write( "{'method':'Post','id':'p1p001,'language':'python33','code':'def alpha(n)\n  return a'}\r\n\r\n" )
+#updated
 
 results = socket.read
 
@@ -41,6 +42,7 @@ socket = Socket.new(AF_INET, SOCK_STREAM, 0)
 socket.connect(sockaddr)
 
 socket.write( "getScores\nplayer000001\r\n\r\n" )
+#todo
 
 results = socket.read
 
@@ -51,6 +53,7 @@ socket = Socket.new(AF_INET, SOCK_STREAM, 0)
 socket.connect(sockaddr)
 
 socket.write( "getLeaderboard\nplayer000001\r\n\r\n" )
+#todo
 
 results = socket.read
 
