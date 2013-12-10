@@ -5,6 +5,12 @@ require 'uri'
 
 
 class Reception
+	def initialize()
+		@problemDB = ProblemDB.new
+		@playerDB = ScorePlayerDB.new
+		@testServer = TestServer.new(problemDB)
+	end
+
 	def run port
 		begin
 			# Start our server to handle connections (will raise things on errors)
@@ -29,9 +35,6 @@ class Reception
 
 	def handle_request from_client
 
-		problemDB = ProblemDB.new
-		playerDB = ScorePlayerDB.new
-		testServer = TestServer.new(problemDB)
 
 		#convert request into function call by case
 		#pProblem(id,code=string)
@@ -39,60 +42,50 @@ class Reception
 		#pScores(id,[uid,score=int])
 		#pLeaderboard([uid,score=int])
 
-		problemDB = ProblemDB.new
-        playerDB = ScorePlayerDB.new
-        testplace = TestServer.new
+		incoming = ""
 
-        #convert request into function call by case
-        #pProblem(id,code=string)
-        #pSolution(id, bool, [achievements,..,..],response=str)
-        #pScores(id,[uid,score=int])
-        #pLeaderboard([uid,score=int])
-
-        incoming = ""
-
-        loop do
-          line = from_client.readline
-          if line.strip.empty?
-            break
-          else
-            incoming << line
-          end
-        end
+		loop do
+			line = from_client.readline
+			if line.strip.empty?
+				break
+			else
+				incoming << line
+			end
+		end
 
 
-        jsoninc = JSON.parse(incoming)
-        puts jsoninc
+		jsoninc = JSON.parse(incoming)
+		puts jsoninc
 
-        response = ""
+		response = ""
 
-        case jsoninc['method']
-        #Posting a solution
-        when "Post"
-          response = testplace.pSolution(jsoninc['id'],jsoninc['language'],jsoninc['code'])
+		case jsoninc['method']
+			#Posting a solution
+		when "Post"
+			response = @testServer.pSolution(jsoninc['id'],jsoninc['language'],jsoninc['code'])
 
-        #Requesting a random problem of x difficulty & y language
-        when "randReq"
+			#Requesting a random problem of x difficulty & y language
+		when "randReq"
 
-          response = fetchRand(jsoninc['language'],jsoninc['difficulty'])
+			response = fetchRand(jsoninc['language'],jsoninc['difficulty'])
 
-        #Requesting a problem of ID
-        when "idReq"
+			#Requesting a problem of ID
+		when "idReq"
 
-          response = problemDB.getProblem(jsoninc['id'])
+			response = @problemDB.getProblem(jsoninc['id'])
 
-        #Fetch scores for client of ID
-        when "getScores"
+			#Fetch scores for client of ID
+		when "getScores"
 
-          response = playerDB.pScores(callargs[0])
+			response = @playerDB.pScores(callargs[0])
 
-        #Fetch leaderboard
-        when "getLeaderboard"
-          response = playerDB.pLeaderboard(callargs[0])
+			#Fetch leaderboard
+		when "getLeaderboard"
+			response = @playerDB.pLeaderboard(callargs[0])
 
-        else
-          puts "Failure to apprehend call"
-        end
+		else
+			puts "Failure to apprehend call"
+		end
 
 		buff = "placeholding\r\n\r\n"
 		puts "responding"
@@ -160,7 +153,7 @@ class ProblemDB
 
 	def retriveFilePath(id)
 		path = Dir.pwd
-	#	TODO: Dynamic file-ending handling, rather than a hardcoded solution.
+		#	TODO: Dynamic file-ending handling, rather than a hardcoded solution.
 		if self.fileListed(id) == true
 			if id[2] == "p"
 				path = path + "/dbroot/#{id[0]}/#{id[1]}/#{id[3..5]}/main.py"

@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.sql.SQLException;
+
 
 public class MainActivity extends ActionBarActivity
         implements
@@ -121,7 +123,14 @@ public class MainActivity extends ActionBarActivity
      */
     @Override
     public void onRandomBugPicked() {
-        Bug bug = new Bug("A3F6E0", Language.PYTHON2, "placeholderCode()");
+        BugDataSource b = new BugDataSource(this);
+        try {
+            b.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
+        }
+        Bug bug = b.createBug("A3F6E0", "PYTHON2", "placeholderCode()");
         startEditor(bug);
     }
 
