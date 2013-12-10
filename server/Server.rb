@@ -6,10 +6,10 @@ require 'json'
 
 
 class Reception
-	def initialize()
+	def initialize
 		@problemDB = ProblemDB.new
 		@playerDB = ScorePlayerDB.new
-		@testServer = TestServer.new(@problemDB)
+		@testServer = TestServer.new @problemDB
 	end
 
 	def run port
@@ -62,33 +62,35 @@ class Reception
 		case jsoninc['method']
 			#Posting a solution
 		when "Post"
-		    puts "D"
-			response = @testServer.pSolution(jsoninc['id'],jsoninc['language'],jsoninc['code'])
+			puts "D"
+			response = @testServer.trySolution(jsoninc['id'],jsoninc['code'])
 
 			#Requesting a random problem of x difficulty & y language
 		when "randReq"
-            puts "R"
-			response = fetchRand(jsoninc['language'],jsoninc['difficulty'])
+			puts "R"
+			response = @problemDB.getRandom(jsoninc['language'],jsoninc['difficulty'])
 
 			#Requesting a problem of ID
 		when "idReq"
-            puts "I"
+			puts "I"
 			response = @problemDB.getProblem(jsoninc['id'])
 
 			#Fetch scores for client of ID
 		when "getScores"
-            puts "S"
-			response = @playerDB.pScores(callargs[0])
+			puts "S"
+			response = @playerDB.getScores(jsoninc['player_id'])
 
-			#Fetch leaderboard
+			#Fetch leaderboard for problem
 		when "getLeaderboard"
-		    puts "L"
-			response = @playerDB.pLeaderboard(callargs[0])
+			puts "L"
+			response = @playerDB.getLeaderboard(jsoninc['id'])
 
 		else
 			puts "Failure to apprehend call"
+			#TODO: Write error to client
 		end
 
+		#TODO: Write proper response
 		buff = "placeholding\r\n\r\n"
 		puts "responding"
 		from_client.write(buff)
@@ -182,7 +184,7 @@ class TestServer
 	end
 
 	#posts a solution
-	def pSolution(arg, code)
+	def trySolution( code)
 		pid = arg[id]
 		testfile = @db.retriveFilePath(pid)
 		while (dir = get_dir).nil?
