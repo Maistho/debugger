@@ -24,24 +24,14 @@ public class EditorFragment extends Fragment {
     private EditText code;
     private UndoRedoEnabler undoRedoEnabler;
 
-    /**
-     * Private constructor, use newInstance
-     */
-    public EditorFragment() {}
-
     public static Fragment newInstance(Bug bug) {
         EditorFragment fragment = new EditorFragment();
         fragment.bug = bug;
         return fragment;
     }
 
-    public void setBug(Bug bug) {
-        //TODO: save old bug
-        this.bug = bug;
-    }
-
     /**
-     * Make sure container implements callback interface
+     * Make sure activity implements callback interface
      */
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -56,13 +46,42 @@ public class EditorFragment extends Fragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (savedInstanceState != null)
             bug = savedInstanceState.getParcelable("bug");
-
 
         //This fragment wants to populate the options menu
         setHasOptionsMenu(true);
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_editor, container, false);
+        if (rootView != null) {
+            code = (EditText) rootView.findViewById(R.id.code_field);
+            code.setText(bug.getCurrentCode());
+            undoRedoEnabler = new UndoRedoEnabler(code);
+        }
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        callback.setTitle(bug.toString());
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("bug", bug);
+    }
+
+    public void onDestroyView() {
+        bug.setCurrentCode(code.getText().toString());
+        //TODO: Save bug
+        super.onDestroyView();
+    }
+
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         MenuItem undo = menu.add(Menu.NONE, MENU_UNDO, Menu.NONE, "Undo");
@@ -79,13 +98,6 @@ public class EditorFragment extends Fragment {
                 MenuItemCompat.SHOW_AS_ACTION_ALWAYS | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
 
     }
-
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("bug", bug);
-    }
-
-
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
@@ -106,34 +118,18 @@ public class EditorFragment extends Fragment {
         }
     }
 
-
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_editor, container, false);
-        if (rootView != null) {
-            code = (EditText) rootView.findViewById(R.id.code_field);
-            code.setText(bug.getCurrentCode());
-            undoRedoEnabler = new UndoRedoEnabler(code);
-            callback.setTitle(bug.toString());
-        }
-        return rootView;
-    }
-
-    public void onDestroyView() {
-        bug.setCurrentCode(code.getText().toString());
-        super.onDestroyView();
+    //TODO: save old bug first
+    public void setBug(Bug bug) {
+        this.bug = bug;
     }
 
     /**
      * Interface to communicate editor changes to the activity
      * Activity must implement this interface!
-     *
-     * //TODO: callback method for "Submit" button
      */
     public interface EditorListener {
         void setTitle(String title);
+        //TODO: callback method for "Submit" button
         //void submitBug(bug);
     }
 }

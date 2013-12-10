@@ -11,8 +11,11 @@ import android.view.MenuItem;
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        implements
+        NavigationDrawerFragment.NavigationDrawerCallbacks,
         BugpickerFragment.BugpickerListener,
+        BuglistFragment.BuglistListener,
+        SettingsFragment.SettingsListener,
         EditorFragment.EditorListener {
 
     private static final int NEW_BUG = 0;
@@ -75,20 +78,17 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * TODO: Handle backStack better - don't add everything
-     * Perhaps don't add bugpicker fragment, to prevent accidental creation of new bug
-     */
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment).addToBackStack(null)
+                .replace(R.id.container, fragment)
                 .commit();
     }
 
     public void setTitle(String title) {
         mTitle = title;
     }
+
 
     /**
      * Callback methods for NavigationDrawerFragment
@@ -98,46 +98,39 @@ public class MainActivity extends ActionBarActivity
         Fragment fragment;
 
         switch (position) {
-            case 0:
+            case NEW_BUG:
                 fragment = BugpickerFragment.newInstance();
+                swapMainFragment(fragment);
                 break;
-            case 1:
-                fragment = PlaceholderFragment.newInstance(position);
+            case RESUME_BUG:
+                fragment = BuglistFragment.newInstance();
+                swapMainFragment(fragment);
                 break;
-            case 2:
-                fragment = PlaceholderFragment.newInstance(position);
+            case SETTINGS:
+                fragment = SettingsFragment.newInstance();
+                swapMainFragment(fragment);
                 break;
             default:
-                fragment = PlaceholderFragment.newInstance(position);
                 break;
         }
 
-        swapMainFragment(fragment);
     }
 
-
     /**
-     * Callback method for PlaceholderFragment
-     */
-    void onSectionAttached(int number) {
-        mTitle = getResources().getStringArray(R.array.nav_drawer_items)[number];
-    }
-
-
-    /**
-     * Implements BugpickerFragment.BugpickerListener
-     * Starts a new EditorFragment with a random bug
-     *
      * TODO: Currently placeholder, server communication needed.
-     *
-     * TODO?: Is a new instance of EditorFragment needed?
-     * What happens with the old EditorFragment if a new bug is selected?
-     * Can the bug within an existing EditorFragment be replaced?
      */
     @Override
     public void onRandomBugPicked() {
         Bug bug = new Bug("A3F6E0", Language.PYTHON2, "placeholderCode()");
+        startEditor(bug);
+    }
 
+    @Override
+    public void onResumeBug(Bug bug) {
+        startEditor(bug);
+    }
+
+    private void startEditor(Bug bug) {
         FragmentManager fm = getSupportFragmentManager();
         Fragment f =  fm.findFragmentById(R.id.editor);
         if (f == null) {

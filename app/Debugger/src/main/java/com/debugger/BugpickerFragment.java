@@ -22,16 +22,8 @@ public class BugpickerFragment extends Fragment
     private BugpickerListener callback; //callback to activity
 
 
-    public BugpickerFragment() {}
-
-    /*TODO: Before this method is called, check if a BF already exists
-      TODO: (see EditorFragment creation for reference)*/
     public static BugpickerFragment newInstance() {
         BugpickerFragment fragment = new BugpickerFragment();
-        /*
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        */
         return fragment;
     }
 
@@ -105,10 +97,16 @@ public class BugpickerFragment extends Fragment
         // Set new_bug_btn onClick handler to this.onClick(View)
         rootView.findViewById(R.id.new_bug_btn).setOnClickListener(this);
 
-        callback.setTitle(TITLE);
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        callback.setTitle(TITLE);
+    }
+
+    //TODO: Could be inner class?
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
