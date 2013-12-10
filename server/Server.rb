@@ -28,7 +28,7 @@ class Reception
 	end
 
 	def handle_request from_client
-		request_line = from_client.readline
+
 		problemDB = ProblemDB.new
 		playerDB = ScorePlayerDB.new
 		testServer = TestServer.new(problemDB)
@@ -39,56 +39,60 @@ class Reception
 		#pScores(id,[uid,score=int])
 		#pLeaderboard([uid,score=int])
 
-		puts request_line
+		problemDB = ProblemDB.new
+        playerDB = ScorePlayerDB.new
+        testplace = TestServer.new
 
-		scode = ""
-		callargs = []
-		response = ""
+        #convert request into function call by case
+        #pProblem(id,code=string)
+        #pSolution(id, bool, [achievements,..,..],response=str)
+        #pScores(id,[uid,score=int])
+        #pLeaderboard([uid,score=int])
 
-		case request_line.chomp
-			#Posting a solution
-		when "Post"
-			loop do
-				line = from_client.readline
-				if line.strip.empty?
-					break
-				else
-					scode << line
-				end
-			end
+        incoming = ""
 
-			response = testServer.pSolution(callargs,scode)
+        loop do
+          line = from_client.readline
+          if line.strip.empty?
+            break
+          else
+            incoming << line
+          end
+        end
 
-			#Requesting a random problem of x difficulty & y language
-		when "randReq"
 
-			callargs << from_client.readline(sep=",")
-			callargs[0][-1]=''
-			callargs << from_client.readline
+        jsoninc = JSON.parse(incoming)
+        puts jsoninc
 
-			response = problemDB.fetchRand(callargs[0],callargs[1])
+        response = ""
 
-			#Requesting a problem of ID
-		when "idReq"
-			callargs << from_client.readline
+        case jsoninc['method']
+        #Posting a solution
+        when "Post"
+          response = testplace.pSolution(jsoninc['id'],jsoninc['language'],jsoninc['code'])
 
-			response = problemDB.pProblem(callargs[0])
+        #Requesting a random problem of x difficulty & y language
+        when "randReq"
 
-			#Fetch scores for client of ID
-		when "getScores"
-			callargs << from_client.readline
+          response = fetchRand(jsoninc['language'],jsoninc['difficulty'])
 
-			response = playerDB.pScores(callargs[0])
+        #Requesting a problem of ID
+        when "idReq"
 
-			#Fetch leaderboard
-		when "getLeaderboard"
-			callargs = from_client.readline
+          response = problemDB.getProblem(jsoninc['id'])
 
-			response = playerDB.pLeaderboard(callargs[0])
+        #Fetch scores for client of ID
+        when "getScores"
 
-		else
-			puts "Failure to apprehend call"
-		end
+          response = playerDB.pScores(callargs[0])
+
+        #Fetch leaderboard
+        when "getLeaderboard"
+          response = playerDB.pLeaderboard(callargs[0])
+
+        else
+          puts "Failure to apprehend call"
+        end
 
 		buff = "placeholding\r\n\r\n"
 		puts "responding"

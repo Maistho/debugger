@@ -42,7 +42,6 @@ socket = Socket.new(AF_INET, SOCK_STREAM, 0)
 socket.connect(sockaddr)
 
 socket.write( "getScores\nplayer000001\r\n\r\n" )
-#todo
 
 results = socket.read
 
@@ -53,7 +52,6 @@ socket = Socket.new(AF_INET, SOCK_STREAM, 0)
 socket.connect(sockaddr)
 
 socket.write( "getLeaderboard\nplayer000001\r\n\r\n" )
-#todo
 
 results = socket.read
 
