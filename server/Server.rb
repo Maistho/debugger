@@ -101,11 +101,11 @@ class Reception
 end
 
 class ProblemDB
-	#ID-standard: lang, difficulty, fileflag(Solution/Hint/Problem), 3-digit ID; Example: p1s001.
-	#	The 3-digit ID is unique for each language and difficulty. Ie p1p000 and p2p000 are two separate problems.
+	#ID-standard: lang, difficulty, 3-digit ID; Example: p1001.
+	#	The 3-digit ID is unique for each language and difficulty. Ie p1000 and p2000 are two separate problems.
 	def initialize
-		@db
-
+		@dbpath = Dir.pwd + "/dbroot/"
+		@ext = {'p' => 'py'}
 		loadDB
 	end
 
@@ -114,7 +114,7 @@ class ProblemDB
 		@db = Hash.new
 		lang = ""
 		diff = 0
-		File.open('dbroot/root.txt').each do |line|
+		File.open("#{@dbpath}root.txt").each do |line|
 			if line[0] != "#" && line[0] != "\t"
 				lang = line[0]
 				@db[lang] = []
@@ -122,7 +122,7 @@ class ProblemDB
 				diff = line[1].to_i
 				@db[lang][diff] = []
 			elsif line[0] == "\t" && line[1] == "\t"
-				@db[lang][diff].push(line[2..4])
+				@db[lang][diff].push(line[2..-2])
 			end
 		end
 	end
@@ -134,17 +134,9 @@ class ProblemDB
 
 	#Checks if the file with the corresponding ID is listed in the database file. Unlisted but existing files are treated as non-existent until added to the database.
 	def fileListed(id)
-		i = 0
-		fileFound = false
-		for i in 0..@db[id[0]][1].size
-			if @db[id[0]][id[1].to_i][i] == id[3..5]
-				fileFound = true
-			end
-			i += 1
-		end
-		return fileFound
+		return @db[id[0]][id[1].to_i].include? id[2..-1]
 	end
-
+=begin
 	#Finds the file with the corresponding ID, given that it's listed in the database, and return it's content as a string.
 	def retrieveFile(id)
 		path = retriveFilePath(id)
@@ -162,7 +154,7 @@ class ProblemDB
 			if id[2] == "p"
 				path = path + "/dbroot/#{id[0]}/#{id[1]}/#{id[3..5]}/main.py"
 			elsif id[2] == "s"
-				path = path + "/dbroot/#{id[0]}/#{id[1]}/#{id[3..5]}/solution.py"
+				path = path + "/dbroot/#{id[0]}/#{id[1]}/#{id[3..5]}/test.py"
 			else
 				path = path + "/dbroot/#{id[0]}/#{id[1]}/#{id[3..5]}/hints.txt"
 			end
@@ -171,6 +163,25 @@ class ProblemDB
 			return nil
 		end
 	end
+=end
+	def getRandom(language, difficulty)
+		response = ""
+		File.open(Dir.glob(@dbpath + language + "/" + difficulty + "/*").sample, "r") {|f| response << f.read}
+		return response
+	end
+
+
+
+	def getTest id
+		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[3..5]}/test.#{@ext[id[0]]}" : nil
+	end
+	def getProblem id
+		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[3..5]}/main.#{@ext[id[0]]}" : nil
+	end
+	def getHints id
+		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[3..5]}/hints.txt" : nil
+	end
+
 end
 
 class TestServer
@@ -236,4 +247,7 @@ else
 end
 #database = ProblemDB.new
 #puts database.retrieveFile("p0p000")
-Reception.new.run port
+if __FILE__ == $0
+	Reception.new.run port
+end
+
