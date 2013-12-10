@@ -2,13 +2,14 @@
 
 require 'socket'
 require 'uri'
+require 'json'
 
 
 class Reception
 	def initialize()
 		@problemDB = ProblemDB.new
 		@playerDB = ScorePlayerDB.new
-		@testServer = TestServer.new(problemDB)
+		@testServer = TestServer.new(@problemDB)
 	end
 
 	def run port
@@ -35,7 +36,6 @@ class Reception
 
 	def handle_request from_client
 
-
 		#convert request into function call by case
 		#pProblem(id,code=string)
 		#pSolution(id, bool, [achievements,..,..],response=str)
@@ -53,34 +53,36 @@ class Reception
 			end
 		end
 
+		puts incoming
 
 		jsoninc = JSON.parse(incoming)
-		puts jsoninc
 
 		response = ""
 
 		case jsoninc['method']
 			#Posting a solution
 		when "Post"
+		    puts "D"
 			response = @testServer.pSolution(jsoninc['id'],jsoninc['language'],jsoninc['code'])
 
 			#Requesting a random problem of x difficulty & y language
 		when "randReq"
-
+            puts "R"
 			response = fetchRand(jsoninc['language'],jsoninc['difficulty'])
 
 			#Requesting a problem of ID
 		when "idReq"
-
+            puts "I"
 			response = @problemDB.getProblem(jsoninc['id'])
 
 			#Fetch scores for client of ID
 		when "getScores"
-
+            puts "S"
 			response = @playerDB.pScores(callargs[0])
 
 			#Fetch leaderboard
 		when "getLeaderboard"
+		    puts "L"
 			response = @playerDB.pLeaderboard(callargs[0])
 
 		else
@@ -219,6 +221,6 @@ else
 	puts 'Usage: ServerCom.rb [port]'
 	exit 1
 end
-database = ProblemDB.new
+#database = ProblemDB.new
 #puts database.retrieveFile("p0p000")
 Reception.new.run port
