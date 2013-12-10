@@ -180,20 +180,31 @@ class TestServer
 	end
 
 	def get_dir
-		return @directories.pop
+		return "/home/test/" + @directories.pop
 	end
 
-	#posts a solution
-	def trySolution( code)
-		pid = arg[id]
-		testfile = @db.retriveFilePath(pid)
+	def return_dir dir
+		@directories.insert(dir)
+	end
+
+	#Tries a solution and returns the output
+	def trySolution(id, code)
+		output_file = "output.txt"
+		test_path = @db.getTest(id)
+		test_file = testpath.split('/').last
+		solution_file = "solution." + testfile.split('.').last
 		while (dir = get_dir).nil?
 			sleep 5
 		end
-		err = %x(mkdir -v #{dir})
+		err = %x(mkdir #{dir})
 		if !err
-			File.open("#{dir}/solution.py",'w') {|f| f.write(code)}
-			%x(cp #{testfile} #{dir}/)
+			File.open("#{dir}/#{solution_file}",'w') {|f| f.write(code)}
+			%x(cp #{test_path} #{dir}/)
+			%x(#{dir}/#{test_file})
+
+			response = ""
+			File.open("#{dir}/#{output_file}", "r") {|f| response << f.read}
+			return response
 		end
 
 	end
@@ -203,12 +214,12 @@ class ScorePlayerDB
 	def initialize
 	end
 
-	def pScores(id)
+	def getScores()
 		puts "pScores found"
 		return ""
 	end
 
-	def pLeaderboard(what)
+	def getLeaderboard(problem_id)
 		puts "pLeaderboard found"
 		return ""
 	end
