@@ -1,12 +1,14 @@
-User databas i format
-UID: nick/google
-points_dict(problemid : points,...:...)
-google_token?
-[problemID,problemID,...,...]
+Userdatabas i format:
+  UID: nick/google
+  points_dict(problemid : points,...:...)
+  google_token?
+  [problemID,problemID,...,...]
 
-Problem databas i format
-ID
-code=string
-testfall
-tips
-scores[uid:[rank,points]] -top 10
+Problemdatabas i format:
+  ID = [language, ex: "p"][difficulty, ex: "0"][number, ex: "001"] = p0001
+  contents:
+    extension eg. "py"
+    paths for:
+      test.**
+      problem.**
+      hints.txt
