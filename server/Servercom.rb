@@ -2,7 +2,7 @@
 
 require 'socket'
 require 'uri'
-require 'JSON'
+require 'json'
 
 
 class Reception
@@ -42,6 +42,7 @@ class Reception
     incoming = ""
 
     loop do
+      line = from_client.readline
       if line.strip.empty?
         break
       else
@@ -49,26 +50,28 @@ class Reception
       end
     end
 
-    JSONinc = JSON.generate(incoming,quirks=true)
+
+    jsoninc = JSON.parse(incoming)
+    puts jsoninc
 
     response = ""
 
-    case JSONinc['method']
+    case jsoninc['method']
     #Posting a solution
     when "Post"
 
-        response = testplace.pSolution(JSONinc['id'],JSONinc['language'],JSONinc['code'])
+        response = testplace.pSolution(jsoninc['id'],jsoninc['language'],jsoninc['code'])
         #returns
 
     #Requesting a random problem of x difficulty & y language
     when "randReq"
 
-        response = fetchRand(JSONinc['language'],JSONinc['difficulty'])
+        response = fetchRand(jsoninc['language'],jsoninc['difficulty'])
 
     #Requesting a problem of ID
     when "idReq"
 
-        response = problemDB.getProblem(JSONinc['id'])
+        response = problemDB.getProblem(jsoninc['id'])
 
     #Fetch scores for client of ID
     when "getScores"
@@ -89,10 +92,12 @@ class Reception
     puts "conn_end"
     # Close the sockets
     from_client.close
+    return nil
   end
 
   def fetchRand
     #todo make a randomizer upon lang&diff
+    return nil
   end
 end
 
