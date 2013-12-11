@@ -3,13 +3,14 @@
 require 'socket'
 require 'uri'
 require 'json'
-
+require 'logger'
 
 class Reception
 	def initialize
 		@problemDB = ProblemDB.new
 		@playerDB = ScorePlayerDB.new
 		@testServer = TestServer.new @problemDB
+		@log = Logger.new STDERR
 	end
 
 	def run port
@@ -23,14 +24,14 @@ class Reception
 			end
 			# CTRL-C
 		rescue Interrupt
-			puts 'Got Interrupt..'
+			@log << 'Got Interrupt..'
 			# Ensure that we release the socket on errors
 		ensure
 			if @socket
 				@socket.close
-				puts 'Socket closed..'
+				@log << 'Socket closed..'
 			end
-			puts 'Quitting.'
+			@log << 'Quitting.'
 		end
 	end
 
@@ -53,7 +54,7 @@ class Reception
 			end
 		end
 
-		puts incoming
+		@log << incoming
 
 		jsoninc = JSON.parse(incoming)
 
@@ -62,39 +63,40 @@ class Reception
 		case jsoninc['method']
 			#Posting a solution
 		when "Post"
-			puts "D"
+			@log << "D"
 			response = @testServer.trySolution(jsoninc['id'],jsoninc['code'])
 
 			#Requesting a random problem of x difficulty & y language
 		when "randReq"
-			puts "R"
+			@log << "R"
 			response = @problemDB.getRandom(jsoninc['language'],jsoninc['difficulty'])
 
 			#Requesting a problem of ID
 		when "idReq"
-			puts "I"
+			@log << "I"
 			response = @problemDB.getProblem(jsoninc['id'])
 
 			#Fetch scores for client of ID
 		when "getScores"
-			puts "S"
+			@log << "S"
 			response = @playerDB.getScores(jsoninc['player_id'])
 
 			#Fetch leaderboard for problem
 		when "getLeaderboard"
-			puts "L"
+			@log << "L"
 			response = @playerDB.getLeaderboard(jsoninc['id'])
 
 		else
-			puts "Failure to apprehend call"
+			@log << "Failure to apprehend call"
 			#TODO: Write error to client
 		end
 
 		#TODO: Write proper response
-		buff = "placeholding\r\n\r\n"
-		puts "responding"
+
+		buff = response + "\r\n\r\n"
+		@log << "responding"
 		from_client.write(buff)
-		puts "conn_end"
+		@log << "conn_end"
 		# Close the sockets
 		from_client.close
 	end
@@ -164,30 +166,48 @@ class ProblemDB
 		end
 	end
 =end
-	def getRandom(language, difficulty)
+
+	def getRandom language, difficulty
 		response = ""
-		File.open(Dir.glob(@dbpath + language + "/" + difficulty + "/*").sample, "r") {|f| response << f.read}
+		File.open(getRandomPath(language, difficulty), "r") {|f| response << f.read}
+		return response
+	end
+	def getTest language, difficulty
+		response = ""
+		File.open(getTestPath(language, difficulty), "r") {|f| response << f.read}
+		return response
+	end
+	def getProblem language, difficulty
+		response = ""
+		File.open(getProblemPath(language, difficulty), "r") {|f| response << f.read}
+		return response
+	end
+	def getHints language, difficulty
+		response = ""
+		File.open(getHintsPath(language, difficulty), "r") {|f| response << f.read}
 		return response
 	end
 
-
-
-	def getTest id
+	def getRandomPath language, difficulty
+		return Dir.glob(@dbpath + language + "/" + difficulty + "/*").sample
+	end
+	def getTestPath id
 		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[3..5]}/test.#{@ext[id[0]]}" : nil
 	end
-	def getProblem id
+	def getProblemPath id
 		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[3..5]}/main.#{@ext[id[0]]}" : nil
 	end
-	def getHints id
+	def getHintsPath id
 		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[3..5]}/hints.txt" : nil
 	end
 
 end
 
 class TestServer
-	def initialize(db)
+	def initialize db
 		@directories = ["test01","test02","test03","test04","test05","test06"]
 		@db = db
+		@logger = Logger.new "testServer.log"
 	end
 
 	def get_dir
@@ -198,10 +218,14 @@ class TestServer
 		@directories.insert(dir)
 	end
 
+	def log error
+		@logger << error
+	end
+
 	#Tries a solution and returns the output
 	def trySolution(id, code)
 		output_file = "output.txt"
-		test_path = @db.getTest(id)
+		test_path = @db.getTestPath(id)
 		test_file = testpath.split('/').last
 		solution_file = "solution." + testfile.split('.').last
 		while (dir = get_dir).nil?
@@ -215,6 +239,14 @@ class TestServer
 
 			response = ""
 			File.open("#{dir}/#{output_file}", "r") {|f| response << f.read}
+
+			%x(rm #{dir}/*)
+			err = %x(rmdir #{dir})
+			if !err
+				return_dir(dir)
+			else
+				log(err)
+			end
 			return response
 		end
 
