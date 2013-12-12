@@ -80,11 +80,12 @@ public class BugDataSource {
     /**
      * getAllBugs
      * @return List of all Bugs in the local database
+     * //TODO: reverse order of _id
      */
      public List<Bug> getAllBugs() {
         List<Bug> bugs = new ArrayList<Bug>();
         Cursor cursor = db.query(BugSQLiteHelper.TABLE_BUGS,
-            columns, null, null, null, null, null);
+            columns, null, null, null, null, BugSQLiteHelper.COLUMN_ID + " DESC");
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
