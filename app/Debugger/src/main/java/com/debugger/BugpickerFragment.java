@@ -34,7 +34,8 @@ public class BugpickerFragment extends Fragment
      */
     public interface BugpickerListener {
         void setTitle(String title);
-        void onRandomBugPicked();
+        void onBugPicked(String id, String language, String difficulty);
+        //void onRandomBugPicked();
         //void onConditionedBugPicked(String language, String difficulty);
         // TODO: Add arguments for language and difficulty
         //public void onSpecificBugPicked(String);
@@ -72,12 +73,13 @@ public class BugpickerFragment extends Fragment
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         language_spinner.setAdapter(adapter);
 
-        // TODO: replace content with enum Difficulty (NYI)
+        // TODO: replace content with enum Difficulty
         Spinner difficulty_spinner = (Spinner) rootView.findViewById(R.id.difficulty_spinner);
         adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.difficulty_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         difficulty_spinner.setAdapter(adapter);
+
 
 
         ToggleButton random_switch = (ToggleButton) rootView.findViewById(R.id.randomness_switch);
@@ -94,7 +96,6 @@ public class BugpickerFragment extends Fragment
             }
         });
 
-        // Set new_bug_btn onClick handler to this.onClick(View)
         rootView.findViewById(R.id.new_bug_btn).setOnClickListener(this);
 
         return rootView;
@@ -111,12 +112,14 @@ public class BugpickerFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_bug_btn:
+
                 /**
                  * TODO: Lift data from Language and Difficulty selectors
                  * Use Language and Difficulty to decide between onRandomBugPicked,
                  * onConditionedBugPicked, and onSpecificBugPicked
                  */
-                callback.onRandomBugPicked();
+                callback.onBugPicked("p0001", "language", "difficulty");
+                //callback.onRandomBugPicked();
                 //callback.onConditionedBugPicked(language, difficulty);
                 //callback.onSpecificBugPicked(id);
                 break;
@@ -124,6 +127,6 @@ public class BugpickerFragment extends Fragment
                 //No handler for View
                 break;
         }
-    }
+    } //p001
 
 }
