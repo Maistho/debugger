@@ -1,72 +1,24 @@
+#!/usr/bin/env ruby
 require "net/http"
 require "socket"
 require "uri"
+require 'json'
 
-include Socket::Constants
+SOCKADDR = Socket.pack_sockaddr_in(8008,"10.37.0.197")
+E = "\r\n\r\n"
 
-socket = Socket.new(AF_INET, SOCK_STREAM, 0)
+def test request
+	socket = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
+	socket.connect(SOCKADDR)
+	socket.write request
+	results = socket.read
+	socket.close
+	puts results
+end
 
-sockaddr = Socket.pack_sockaddr_in(8008,"localhost")
-
-socket.connect(sockaddr)
-
-socket.write( "{\"method\":\"idReq\",\"id\":\"p0001\"}\r\n\r\n" )
-
-results = socket.read
-
-socket.close
-
-puts results
-
-socket = Socket.new(AF_INET, SOCK_STREAM, 0)
-
-socket.connect(sockaddr)
-
-socket.write( "{\"method\":\"randReq\",\"difficulty\":\"2\",\"language\":\"python33\"}\r\n\r\n" )
-
-results = socket.read
-
-socket.close
-
-sleep 4
-
-socket = Socket.new(AF_INET, SOCK_STREAM, 0)
-
-socket.connect(sockaddr)
-
-socket.write( "{\"method\":\"Post\",\"id\":\"p1p001\",\"language\":\"python33\",\"code\":\"def alpha\(n\)\\n  return a\"}\r\n\r\n" )
-
-results = socket.read
-
-socket.close
-
-sleep 4
-
-socket = Socket.new(AF_INET, SOCK_STREAM, 0)
-
-socket.connect(sockaddr)
-
-socket.write( "{\"method\":\"getScores\",\"plid\":\"player000001\"}\r\n\r\n" )
-
-results = socket.read
-
-socket.close
-
-sleep 4
-
-socket = Socket.new(AF_INET, SOCK_STREAM, 0)
-
-socket.connect(sockaddr)
-
-socket.write( "{\"method\":\"getLeaderboard\",\"plid\":\"player000001\"}\r\n\r\n" )
-
-results = socket.read
-
-socket.close
-
-puts results
-
-#Net::HTTP.get(URI("http://localhost:8008/probe"))
-
-#Net::HTTP.post_form(URI("http://localhost:8008/probe"),{ "q" => "ruby", "max" => "50"})
-
+test({"method" => "getBug",	"id" => "p0001"}.to_json + E)
+test({"method" => "getBug",	"difficulty" => "EASY", "language" => "PYTHON2"}.to_json + E)
+test({"method" => "postBug",	"code" => "print(123)", "id" => "p0000"}.to_json + E)
+test({"method" => "postBug",	"code" => "def fib(n):\n\tif n <= 1:\n\t\treturn n\n\telse:\n\t\treturn fib(n)+fib(n-1)\n\n", "id" => "p0000"}.to_json + E)
+test({"method" => "postBug",	"code" => "def fib(n):\n\tif n <= 1:\n\t\treturn n\n\telse:\n\t\treturn fib(n-1)+fib(n-2)\n\n", "id" => "p0000"}.to_json + E)
+test({"method" => "postBug",	"code" => "def fib(n):\n\tif n <= 1:\n\t\treturn n\n\telse:\n\t\treturn fib(n-1)+fib(n-3)\n\n", "id" => "p0000"}.to_json + E)
