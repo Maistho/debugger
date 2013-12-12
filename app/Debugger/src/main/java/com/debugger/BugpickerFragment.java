@@ -63,17 +63,21 @@ public class BugpickerFragment extends Fragment
 
         // TODO: replace content with enum Language
         Spinner language_spinner = (Spinner) rootView.findViewById(R.id.language_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.language_spinner, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        language_spinner.setAdapter(adapter);
+        ArrayAdapter<Language> languageArrayAdapter = new ArrayAdapter<Language>(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                Language.values());
+        languageArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        language_spinner.setAdapter(languageArrayAdapter);
 
         // TODO: replace content with enum Difficulty
         Spinner difficulty_spinner = (Spinner) rootView.findViewById(R.id.difficulty_spinner);
-        adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.difficulty_spinner, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        difficulty_spinner.setAdapter(adapter);
+        ArrayAdapter<Difficulty> difficultyArrayAdapter = new ArrayAdapter<Difficulty>(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                Difficulty.values());
+        difficultyArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        difficulty_spinner.setAdapter(difficultyArrayAdapter);
 
 
 
