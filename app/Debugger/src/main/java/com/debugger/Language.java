@@ -5,7 +5,7 @@ package com.debugger;
  * use Language.valueOf("PYTHON2") to get enumerable by name
  */
 public enum Language {
-    PYTHON2 ("Python 2.7", "2.7.6");
+    PYTHON2 ("Python 2.7", "2.7.5");
         /*
         PYTHON3 ("Python 3.3", "3.3.3"),
         JAVA ("Java 7", "1.7.45"),

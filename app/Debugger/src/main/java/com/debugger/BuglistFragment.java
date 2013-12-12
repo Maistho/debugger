@@ -72,7 +72,6 @@ public class BuglistFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         callback.onResumeBug(bugList.get(position));
-        //swapmainfragment(ssksk, bug);
     }
 
     private class BugArrayAdapter extends ArrayAdapter<Bug> {
@@ -92,7 +91,7 @@ public class BuglistFragment extends ListFragment {
             View listItem = inflater.inflate(R.layout.layout_bug_list_item, parent, false);
 
             TextView label = (TextView) listItem.findViewById(R.id.label);
-            label.setText(bugs.get(position).getId());
+            label.setText(bugs.get(position).getBugId());
             TextView description = (TextView) listItem.findViewById(R.id.description);
             description.setText(bugs.get(position).getLanguage().toString());
 
