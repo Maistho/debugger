@@ -4,46 +4,38 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 class Bug implements Parcelable {
-    private final String id;
+    private final String solutionId;
+    private final String bugId;
     private final String originalCode;
     private String currentCode;
     private Language language;
 
-    public Bug(String id, Language language, String originalCode) {
-        this.id = id;
+    public Bug(String solutionId, String bugId, Language language, String originalCode) {
+        this.solutionId = solutionId;
+        this.bugId = bugId;
         this.language = language;
-        //TODO: placeholder code
-        //this.originalCode = originalCode;
-        this.originalCode = "#! /usr/bin/env python3.3\n" +
-                "\n" +
-                "def alpha(n):\n" +
-                "    n = \"c\"+n[0][2]\n" +
-                "    c = [[],[],[]]\n" +
-                "    c[0][1].append(n)\n" +
-                "    return c\n" +
-                "\n" +
-                "a = alpha([\"shave\"])\n" +
-                "#desired output is [[[],[[],'cave']]]\n" +
-                "print(a)";
+        this.originalCode = originalCode;
         currentCode = this.originalCode;
     }
 
     public void setCurrentCode(String code) { currentCode = code; }
 
-    public String getId() { return id; }
+    public String getSolutionId() { return solutionId; }
+    public String getBugId() { return bugId; }
     public Language getLanguage() { return language; }
     public String getOriginalCode() { return originalCode; }
     public String getCurrentCode() { return currentCode; }
 
 
     public String toString() {
-        return language.getName() + ": " + id;
+        return language.getName() + ": " + bugId;
     }
 
 
     @Override
     public void writeToParcel(Parcel out, int flags) {
-        out.writeString(id);
+        out.writeString(solutionId);
+        out.writeString(bugId);
         out.writeString(language.toString());
         out.writeString(originalCode);
         out.writeString(currentCode);
@@ -59,7 +51,8 @@ class Bug implements Parcelable {
     };
 
     private Bug(Parcel in) {
-        id = in.readString();
+        solutionId = in.readString();
+        bugId = in.readString();
         language = Language.valueOf(in.readString());
         originalCode = in.readString();
         currentCode = in.readString();
