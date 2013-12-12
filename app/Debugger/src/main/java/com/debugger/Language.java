@@ -28,5 +28,8 @@ public enum Language {
     public String getVersion() {
         return version;
     }
-    //Warning: do not overload toString, used to implement Parcelable Bugs
+
+    public String toString() {
+        return getName();
+    }
 }
