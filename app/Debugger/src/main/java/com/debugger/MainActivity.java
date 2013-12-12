@@ -9,13 +9,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import java.sql.SQLException;
+import org.json.JSONObject;
 
 public class MainActivity extends ActionBarActivity
         implements
         DownloaderFragment.DownloaderListener,
+        SubmitterFragment.SubmitterListener,
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         BugpickerFragment.BugpickerListener,
         BuglistFragment.BuglistListener,
@@ -128,7 +128,7 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .add(R.id.container,
                         DownloaderFragment.newInstance(id, language, difficulty),
-                        "progressBar")
+                        "downloadProgressBar")
                 .commit();
     }
 
@@ -137,7 +137,7 @@ public class MainActivity extends ActionBarActivity
         Log.w("MainFragment", "Bug download succeeded");
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .remove(fragmentManager.findFragmentByTag("progressBar"))
+                .remove(fragmentManager.findFragmentByTag("downloadProgressBar"))
                 .commit();
         startEditor(bug);
     }
@@ -166,12 +166,34 @@ public class MainActivity extends ActionBarActivity
         swapMainFragment(f);
     }
 
+
     /**
      * Callback methods for EditorFragment
      */
     @Override
     public void submitBug(Bug bug) {
-        //TODO: NYI
-        Toast.makeText(this, "Submit code - NYI", Toast.LENGTH_SHORT).show();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.container,
+                        SubmitterFragment.newInstance(bug),
+                        "submitProgressBar")
+                .commit();
+        //Toast.makeText(this, "Submit code - NYI", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onBugSubmitted(JSONObject output) {
+        Log.w("Response", output.toString());
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .remove(fragmentManager.findFragmentByTag("submitProgressBar"))
+                .commit();
+    }
+
+    @Override
+    public void onBugSubmitFailed() {
+        Log.w("Failed", "aww");
+    }
+
 }
