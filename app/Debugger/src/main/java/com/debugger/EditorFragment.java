@@ -3,6 +3,7 @@ package com.debugger;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,7 +12,8 @@ import android.support.v4.view.MenuItemCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import java.sql.SQLException;
 
 public class EditorFragment extends Fragment {
 
@@ -34,6 +36,7 @@ public class EditorFragment extends Fragment {
      * Make sure activity implements callback interface
      */
     public void onAttach(Activity activity) {
+        Log.w("EditorFragment", "onAttach");
         super.onAttach(activity);
 
         try {
@@ -45,8 +48,9 @@ public class EditorFragment extends Fragment {
     }
 
     public void onCreate(Bundle savedInstanceState) {
+        Log.w("EditorFragment", "onCreate");
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        //setRetainInstance(true);
         if (savedInstanceState != null)
             bug = savedInstanceState.getParcelable("bug");
 
@@ -56,6 +60,7 @@ public class EditorFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.w("EditorFragment", "onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_editor, container, false);
         if (rootView != null) {
             code = (EditText) rootView.findViewById(R.id.code_field);
@@ -67,18 +72,21 @@ public class EditorFragment extends Fragment {
 
     @Override
     public void onStart() {
+        Log.w("EditorFragment", "onStart");
         super.onStart();
         callback.setTitle(bug.toString());
     }
 
     public void onSaveInstanceState(Bundle outState) {
+        Log.w("EditorFragment", "onSaveInstanceState");
         super.onSaveInstanceState(outState);
         outState.putParcelable("bug", bug);
     }
 
     public void onDestroyView() {
+        Log.w("EditorFragment", "onDestroyView");
         bug.setCurrentCode(code.getText().toString());
-        //TODO: Save bug
+        saveBug();
         super.onDestroyView();
     }
 
@@ -102,8 +110,7 @@ public class EditorFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case MENU_SUBMIT:
-                //TODO: Placeholder action for submit button
-                Toast.makeText(getActivity(), "Submit code - NYI", Toast.LENGTH_SHORT).show();
+                callback.submitBug(bug);
                 return true;
             case MENU_REDO:
                 undoRedoEnabler.redo();
@@ -118,9 +125,21 @@ public class EditorFragment extends Fragment {
         }
     }
 
-    //TODO: save old bug first
     public void setBug(Bug bug) {
+        saveBug();
         this.bug = bug;
+    }
+
+    private void saveBug() {
+        BugDataSource bds = new BugDataSource(getActivity());
+        try {
+            bds.open();
+            bds.updateBug(bug);
+        } catch (SQLException e) {
+            Log.w("EditorFragment", e);
+        } finally {
+            bds.close();
+        }
     }
 
     /**
@@ -129,7 +148,6 @@ public class EditorFragment extends Fragment {
      */
     public interface EditorListener {
         void setTitle(String title);
-        //TODO: callback method for "Submit" button
-        //void submitBug(bug);
+        void submitBug(Bug bug);
     }
 }
