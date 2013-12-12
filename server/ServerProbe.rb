@@ -10,11 +10,13 @@ sockaddr = Socket.pack_sockaddr_in(8008,"localhost")
 
 socket.connect(sockaddr)
 
-socket.write( "{\"method\":\"idReq\",\"id\":\"py0012\"}\r\n\r\n" )
+socket.write( "{\"method\":\"idReq\",\"id\":\"p0001\"}\r\n\r\n" )
 
 results = socket.read
 
 socket.close
+
+puts results
 
 socket = Socket.new(AF_INET, SOCK_STREAM, 0)
 
