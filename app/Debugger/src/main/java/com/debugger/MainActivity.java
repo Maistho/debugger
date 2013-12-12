@@ -144,6 +144,10 @@ public class MainActivity extends ActionBarActivity
 
     public void onBugDownloadFailed() {
         Log.w("MainFragment", "Bug download failed");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .remove(fragmentManager.findFragmentByTag("downloadProgressBar"))
+                .commit();
         swapMainFragment(BugpickerFragment.newInstance());
     }
 
@@ -194,6 +198,10 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onBugSubmitFailed() {
         Log.w("Failed", "aww");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .remove(fragmentManager.findFragmentByTag("submitProgressBar"))
+                .commit();
     }
 
 }
