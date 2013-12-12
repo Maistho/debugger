@@ -75,9 +75,7 @@ public class DownloaderFragment extends Fragment implements BugDownloadListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_bugpicker, container, false);
-        //TODO add UI - progress bar
-        return rootView;
+        return inflater.inflate(R.layout.fragment_downloader, container, false);
     }
 
     @Override
@@ -126,7 +124,6 @@ public class DownloaderFragment extends Fragment implements BugDownloadListener 
 
         private static final String SERVER_IP = "109.124.136.140";
         private static final int SERVER_PORT = 56852;
-
 
         private final Context context;
         private final BugDownloadListener callback;
