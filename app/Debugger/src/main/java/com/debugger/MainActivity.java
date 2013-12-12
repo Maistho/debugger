@@ -6,14 +6,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.sql.SQLException;
 
 
 public class MainActivity extends ActionBarActivity
         implements
+        DownloaderFragment.DownloaderListener,
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         BugpickerFragment.BugpickerListener,
         BuglistFragment.BuglistListener,
@@ -118,20 +121,21 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    /**
-     * TODO: Currently placeholder, server communication needed.
-     */
     @Override
-    public void onRandomBugPicked() {
-        BugDataSource b = new BugDataSource(this);
-        try {
-            b.open();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return;
-        }
-        Bug bug = b.createBug("A3F6E0", "PYTHON2", "placeholderCode()");
+    public void onBugPicked(String id, String language, String difficulty) {
+        Log.w("onBugPicked", "enter");
+        swapMainFragment(DownloaderFragment.newInstance(id, language, difficulty));
+    }
+
+    @Override
+    public void onBugDownloaded(Bug bug) {
+        Log.w("MainFragment", "Bug download succeeded");
         startEditor(bug);
+    }
+
+    public void onBugDownloadFailed() {
+        Log.w("MainFragment", "Bug download failed");
+        swapMainFragment(BugpickerFragment.newInstance());
     }
 
     @Override
@@ -153,6 +157,10 @@ public class MainActivity extends ActionBarActivity
 
     /**
      * Callback methods for EditorFragment
-     * TODO: NYI
      */
+    @Override
+    public void submitBug(Bug bug) {
+        //TODO: NYI
+        Toast.makeText(this, "Submit code - NYI", Toast.LENGTH_SHORT).show();
+    }
 }
