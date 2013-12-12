@@ -5,19 +5,28 @@ Server
 
 	Tar emot en json som innehåller:
 	"method", kan vara:
-		"post", Posting a solution, requires:
-			"code", Code to test
+
+Server Methods:
+	Specify method using {"method" => "thing"}
+
+	"getBug", Requesting a problem
+		requires:
 			"id", Problem ID
-		"getBug", Requesting a problem, requires:
-			"id", Problem ID, if nil:
-				"language", eg. "p"
-				"difficulty", eg. "0"
-		"getScores", NYI, requires:
-			"player_id",
-		"getLeaderboard", NYI, requires:
-			"id",
+		or
+			"language", eg. "p"
+			"difficulty", eg. "0"
+		returns:
+			"id", Problem ID
+			"language",
+			"code", Problem code
 
+	"post", Posting a solution, requires:
+		"code", Code to test
+		"id", Problem ID
 
+	"getScores", NYI, requires:
+		"player_id",
+		"id",
 
 TODO: Fix remaining part of MasterAPI
 --------------------------------------------------
