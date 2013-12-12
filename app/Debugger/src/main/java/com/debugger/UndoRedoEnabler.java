@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-//TODO: Check timing
 public class UndoRedoEnabler {
     private final List<Edit> history = new LinkedList<Edit>();
     private ListIterator<Edit> historyIterator = history.listIterator();
@@ -112,21 +111,14 @@ public class UndoRedoEnabler {
         historyIterator.add(item);
 
         if (maxHistorySize >= 0 && history.size() > maxHistorySize) {
-            //iterator to front of history
             historyIterator = history.listIterator();
-
-            //TODO: Loop maybe not needed? Adding one item can't increase history.size() by >1
-            do {
-                historyIterator.remove();
-            } while (history.size() > maxHistorySize);
-
-            //iterator to back of history
+            historyIterator.remove();
+            //do while (history.size() > maxHistorySize);
             historyIterator = history.listIterator(history.size());
         }
     }
 
     private final class TextChangeListener implements TextWatcher {
-        private EditType lastEditType = EditType.INSERT;
         private CharSequence oldText;
 
         private long lastEditTime = 0;
@@ -167,6 +159,7 @@ public class UndoRedoEnabler {
             } else {
                 lastEdit.newText = TextUtils.concat(lastEdit.newText, newText);
             }
+            lastEditTime = System.currentTimeMillis();
         }
 
         public void afterTextChanged(Editable s) {}

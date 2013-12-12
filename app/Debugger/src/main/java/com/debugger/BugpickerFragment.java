@@ -35,11 +35,6 @@ public class BugpickerFragment extends Fragment
     public interface BugpickerListener {
         void setTitle(String title);
         void onBugPicked(String id, String language, String difficulty);
-        //void onRandomBugPicked();
-        //void onConditionedBugPicked(String language, String difficulty);
-        // TODO: Add arguments for language and difficulty
-        //public void onSpecificBugPicked(String);
-        // TODO: Specific bug picker
     }
 
     /**
@@ -107,7 +102,6 @@ public class BugpickerFragment extends Fragment
         callback.setTitle(TITLE);
     }
 
-    //TODO: Could be inner class?
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -119,9 +113,6 @@ public class BugpickerFragment extends Fragment
                  * onConditionedBugPicked, and onSpecificBugPicked
                  */
                 callback.onBugPicked("p0001", "language", "difficulty");
-                //callback.onRandomBugPicked();
-                //callback.onConditionedBugPicked(language, difficulty);
-                //callback.onSpecificBugPicked(id);
                 break;
             default:
                 //No handler for View
