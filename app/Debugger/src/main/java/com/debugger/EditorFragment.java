@@ -110,6 +110,7 @@ public class EditorFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case MENU_SUBMIT:
+                saveBug();
                 callback.submitBug(bug);
                 return true;
             case MENU_REDO:
