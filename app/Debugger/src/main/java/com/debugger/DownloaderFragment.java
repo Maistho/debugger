@@ -63,7 +63,7 @@ public class DownloaderFragment extends Fragment implements BugDownloadListener 
             callback = (DownloaderListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement EditorListener");
+                    + " must implement DownloaderListener");
         }
     }
 
