@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Debugger!</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
-    <string name="action_settings">Settings</string>
-
-    <string name="bugpicker_switch">Random bug?</string>
-    <string name="language_spinner_desc">Language: </string>
-    <string name="difficulty_spinner_desc">Difficulty: </string>
-    <string name="new_bug_btn">Solve Bug!</string>
     <string-array name="nav_drawer_items">
         <item>New Bug</item>
         <item>Resume Bug</item>
         <item>Settings</item>
     </string-array>
 
-    <string-array name="language_spinner">
-        <item>Python</item>
-        <item>Java</item>
-        <item>Seraphina</item>
-    </string-array>
-
-    <string-array name="difficulty_spinner">
-        <item>n00b</item>
-        <item>wannabe</item>
-        <item>1337 h4x0r</item>
-    </string-array>
+    <string name="bugpicker_switch">Random bug?</string>
+    <string name="language_spinner_desc">Language: </string>
+    <string name="difficulty_spinner_desc">Difficulty: </string>
+    <string name="new_bug_btn">Solve Bug!</string>
 </resources>
