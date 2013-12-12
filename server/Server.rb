@@ -15,6 +15,8 @@ class Reception
 		@problemDB = ProblemDB.new
 		@playerDB = ScorePlayerDB.new
 		@testServer = TestServer.new @problemDB
+		#TODO: Create helpfunction for logging
+		#TODO: Set logging level from commandline start
 		@log = Logger.new STDERR
 		@log.level = Logger::DEBUG
 	end
@@ -36,8 +38,8 @@ class Reception
 			if @socket
 				@socket.close
 				@log.add Logger::DEBUG, 'Socket closed'
-				@testServer.clean
 			end
+			@testServer.clean
 			@log.add Logger::INFO, 'Shut down'
 		end
 	end
@@ -57,8 +59,7 @@ class Reception
 		@log.add Logger::DEBUG, jsoninc
 
 		response = {}
-		response['id'] = jsoninc['id']
-
+		#TODO: Manage response creating in a better way
 		case jsoninc['method']
 		when "postBug"
 			#Posting a solution
@@ -91,19 +92,19 @@ class Reception
 			#TODO: Write error to client
 		end
 
-		#TODO: Write proper response
-
 		buff = response.to_json + "\r\n\r\n"
-		@log.add Logger::DEBUG, "responding"
+		@log.add Logger::DEBUG, "Responding:"
 		@log.add Logger::DEBUG, response
 		from_client.write(buff)
 		# Close the sockets
 		from_client.close
-		@log.add Logger::DEBUG, "Closed Socket\n"
+		@log.add Logger::DEBUG, "Closed Socket"
 	end
 end
 
 class ProblemDB
+	#TODO: Remake ID standard
+	#TODO: Move entire DB system to external database
 	#ID-standard: lang, difficulty, 3-digit ID; Example: p1001.
 	#	The 3-digit ID is unique for each language and difficulty. Ie p1000 and p2000 are two separate problems.
 	def initialize
@@ -141,40 +142,11 @@ class ProblemDB
 	def fileListed(id)
 		return @db[LANG[id[0]]][DIFF[id[1]]].include? id[2..-1]
 	end
-=begin
-	#Finds the file with the corresponding ID, given that it's listed in the database, and return it's content as a string.
-	def retrieveFile(id)
-		path = retriveFilePath(id)
-		fileContent = ""
-		File.open(path).each do |line|
-			fileContent += line
-		end		response = ""
-		File.open(getProblemPath(id), "r") {|f| response << f.read}
-
-		return fileContent
-	end
-
-	def retriveFilePath(id)
-		path = Dir.pwd
-		#	TODO: Dynamic file-ending handling, rather than a hardcoded solution.
-		if self.fileListed(id) == true
-			if id[2] == "p"
-				path = path + "/dbroot/#{id[0]}/#{id[1]}/#{id[3..5]}/main.py"
-			elsif id[2] == "s"
-				path = path + "/dbroot/#{id[0]}/#{id[1]}/#{id[3..5]}/test.py"
-			else
-				path = path + "/dbroot/#{id[0]}/#{id[1]}/#{id[3..5]}/hints.txt"
-			end
-			return path
-		else
-			return nil
-		end
-	end
-=end
 
 	def getRandom language, difficulty
 		return LANG[language] + DIFF[difficulty] + @db[language][difficulty].sample
 	end
+
 	def getTest id
 		response = {}
 		if !(path = getTestPath(id)).nil?
@@ -184,6 +156,7 @@ class ProblemDB
 		end
 		return response
 	end
+
 	def getProblem id
 		response = {}
 		if !(path = getProblemPath(id)).nil?
@@ -193,6 +166,7 @@ class ProblemDB
 		end
 		return response
 	end
+
 	def getHints id
 		response = {}
 		if !(path = getHintsPath(id)).nil?
@@ -206,9 +180,11 @@ class ProblemDB
 	def getTestPath id
 		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[2..4]}/test.#{@ext[id[0]]}" : nil
 	end
+
 	def getProblemPath id
 		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[2..4]}/main.#{@ext[id[0]]}" : nil
 	end
+
 	def getHintsPath id
 		return fileListed(id) ? @dbpath + "#{id[0]}/#{id[1]}/#{id[2..4]}/hints.txt" : nil
 	end
@@ -219,10 +195,10 @@ class ProblemDB
 		return response
 	end
 
-
 end
 
 class TestServer
+	#TODO: manage directories in a better way
 	def initialize db
 		@directories = ["test01","test02","test03","test04","test05","test06"]
 		@stddirs = @directories
@@ -253,6 +229,7 @@ class TestServer
 	end
 
 	#Tries a solution and returns the output
+	#TODO: Better error logs
 	def trySolution(id, code)
 		test_path = @db.getTestPath(id)
 		test_file = test_path.split('/').last
@@ -292,6 +269,7 @@ class TestServer
 end
 
 class ScorePlayerDB
+	#TODO: Implement using a relation database
 	def initialize
 	end
 
@@ -307,15 +285,16 @@ class ScorePlayerDB
 end
 
 # Get parameters and start the server
-if ARGV.empty?
-	port = 8008
-elsif ARGV.size == 1
-	port = ARGV[0].to_i
-else
-	puts 'Usage: ServerCom.rb [port]'
-	exit 1
-end
+#TODO: Better argument management, including more options like debug and such
 if __FILE__ == $0
+	if ARGV.empty?
+		port = 8008
+	elsif ARGV.size == 1
+		port = ARGV[0].to_i
+	else
+		puts 'Usage: ServerCom.rb [port]'
+		exit 1
+	end
 	Reception.new.run port
 end
 
