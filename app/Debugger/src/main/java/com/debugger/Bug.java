@@ -36,7 +36,7 @@ class Bug implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(solutionId);
         out.writeString(bugId);
-        out.writeString(language.toString());
+        out.writeString(language.name());
         out.writeString(originalCode);
         out.writeString(currentCode);
     }
