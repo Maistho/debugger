@@ -85,7 +85,6 @@ public class EditorFragment extends Fragment {
 
     public void onDestroyView() {
         Log.w("EditorFragment", "onDestroyView");
-        bug.setCurrentCode(code.getText().toString());
         saveBug();
         super.onDestroyView();
     }
@@ -132,6 +131,7 @@ public class EditorFragment extends Fragment {
     }
 
     private void saveBug() {
+        bug.setCurrentCode(code.getText().toString());
         BugDataSource bds = new BugDataSource(getActivity());
         try {
             bds.open();
