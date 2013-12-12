@@ -280,14 +280,13 @@ class TestServer
 			return {}
 		end
 	ensure
-		log "in ensure:"
 		if !dir.nil?
-			log "wat"
 			%x(rm #{dir}/*)
 			err = %x(rmdir #{dir})
-			log @directories
+			if err != ""
+				log err
+			end
 			return_dir(dir)
-			log @directories
 		end
 	end
 end
