@@ -194,8 +194,15 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .remove(fragmentManager.findFragmentByTag("submitProgressBar"))
                 .commit();
-    }
+        try {
+            String tst = output.getString("output");
+            String[] tstarr = tst.split("\n");
+            Toast.makeText(this, tstarr[tstarr.length-1], Toast.LENGTH_LONG).show();
 
+        } catch (Exception e) {
+            //TODO: proper catch
+        }
+    }
     @Override
     public void onBugSubmitFailed() {
         Log.w("Failed", "aww");
