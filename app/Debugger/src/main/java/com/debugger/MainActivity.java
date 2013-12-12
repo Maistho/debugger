@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import java.sql.SQLException;
 
-
 public class MainActivity extends ActionBarActivity
         implements
         DownloaderFragment.DownloaderListener,
@@ -85,6 +84,7 @@ public class MainActivity extends ActionBarActivity
 
     public void swapMainFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
+        Log.w("swapMainFragment", Integer.toString(fragmentManager.getBackStackEntryCount()));
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
@@ -124,12 +124,21 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onBugPicked(String id, String language, String difficulty) {
         Log.w("onBugPicked", "enter");
-        swapMainFragment(DownloaderFragment.newInstance(id, language, difficulty));
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.container,
+                        DownloaderFragment.newInstance(id, language, difficulty),
+                        "progressBar")
+                .commit();
     }
 
     @Override
     public void onBugDownloaded(Bug bug) {
         Log.w("MainFragment", "Bug download succeeded");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .remove(fragmentManager.findFragmentByTag("progressBar"))
+                .commit();
         startEditor(bug);
     }
 
@@ -147,8 +156,10 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fm = getSupportFragmentManager();
         Fragment f =  fm.findFragmentById(R.id.editor);
         if (f == null) {
+            Log.w("startEditor", "new editor");
             f = EditorFragment.newInstance(bug);
         } else {
+            Log.w("startEditor", "old editor");
             ((EditorFragment) f).setBug(bug);
         }
 
