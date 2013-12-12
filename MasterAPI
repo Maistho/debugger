@@ -20,13 +20,25 @@ Server Methods:
 			"language",
 			"code", Problem code
 
-	"post", Posting a solution, requires:
-		"code", Code to test
-		"id", Problem ID
+	"post", Posting a solution
+		requires:
+			"code", Code to test
+			"id", Problem ID
+		returns:
+			"output",
+			"id",
 
-	"getScores", NYI, requires:
-		"player_id",
-		"id",
+	"getScores", NYI
+		requires:
+			"player_id",
+		returns:
+			NYI
+
+	"getLeaderboard", NYI
+		requires:
+			"id",
+		returns:
+			NYI
 
 TODO: Fix remaining part of MasterAPI
 --------------------------------------------------
