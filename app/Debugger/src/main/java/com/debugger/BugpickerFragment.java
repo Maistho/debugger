@@ -3,6 +3,7 @@ package com.debugger;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,7 @@ public class BugpickerFragment extends Fragment
 
 
     public static BugpickerFragment newInstance() {
-        BugpickerFragment fragment = new BugpickerFragment();
-        return fragment;
+        return new BugpickerFragment();
     }
 
 
@@ -61,7 +61,6 @@ public class BugpickerFragment extends Fragment
 
         final View rootView = inflater.inflate(R.layout.fragment_bugpicker, container, false);
 
-        // TODO: replace content with enum Language
         Spinner language_spinner = (Spinner) rootView.findViewById(R.id.language_spinner);
         ArrayAdapter<Language> languageArrayAdapter = new ArrayAdapter<Language>(
                 getActivity(),
@@ -70,7 +69,6 @@ public class BugpickerFragment extends Fragment
         languageArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         language_spinner.setAdapter(languageArrayAdapter);
 
-        // TODO: replace content with enum Difficulty
         Spinner difficulty_spinner = (Spinner) rootView.findViewById(R.id.difficulty_spinner);
         ArrayAdapter<Difficulty> difficultyArrayAdapter = new ArrayAdapter<Difficulty>(
                 getActivity(),
@@ -110,18 +108,17 @@ public class BugpickerFragment extends Fragment
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_bug_btn:
+                Spinner language = (Spinner) getView().findViewById(R.id.language_spinner);
+                Spinner difficulty = (Spinner) getView().findViewById(R.id.difficulty_spinner);
 
-                /**
-                 * TODO: Lift data from Language and Difficulty selectors
-                 * Use Language and Difficulty to decide between onRandomBugPicked,
-                 * onConditionedBugPicked, and onSpecificBugPicked
-                 */
-                callback.onBugPicked("p0001", "language", "difficulty");
+                //TODO: implement id selector
+                callback.onBugPicked(
+                        null,
+                        Language.values()[language.getSelectedItemPosition()].name(),
+                        Difficulty.values()[difficulty.getSelectedItemPosition()].name());
                 break;
             default:
-                //No handler for View
                 break;
         }
-    } //p001
-
+    }
 }
