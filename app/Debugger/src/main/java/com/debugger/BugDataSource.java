@@ -34,9 +34,24 @@ public class BugDataSource {
         dbHelper.close();
     }
 
-    public Bug createBug(String id, String language, String code) {
+    public void updateBug(Bug bug) {
         ContentValues values = new ContentValues();
-        values.put(BugSQLiteHelper.COLUMN_BUG_ID, id);
+        values.put(BugSQLiteHelper.COLUMN_USER_CODE, bug.getCurrentCode());
+
+        db.update(BugSQLiteHelper.TABLE_BUGS,
+                values,
+                BugSQLiteHelper.COLUMN_ID + " = " + bug.getSolutionId(),
+                null);
+    }
+
+
+    public Bug createBug(String bugId, String language, String code) {
+        if (bugId == null || language == null || code == null)
+            return null;
+
+
+        ContentValues values = new ContentValues();
+        values.put(BugSQLiteHelper.COLUMN_BUG_ID, bugId);
         values.put(BugSQLiteHelper.COLUMN_LANGUAGE, language);
         values.put(BugSQLiteHelper.COLUMN_SOURCE_CODE, code);
         values.put(BugSQLiteHelper.COLUMN_USER_CODE, code);
@@ -59,7 +74,7 @@ public class BugDataSource {
      */
     public void deleteBug(Bug bug) {
         db.delete(BugSQLiteHelper.TABLE_BUGS,
-            BugSQLiteHelper.COLUMN_BUG_ID + " = " + bug.getId(), null);
+            BugSQLiteHelper.COLUMN_ID + " = " + bug.getSolutionId(), null);
     }
 
     /**
@@ -82,6 +97,7 @@ public class BugDataSource {
 
     private Bug cursorToBug(Cursor cursor) {
         Bug bug = new Bug(
+                cursor.getString(cursor.getColumnIndex(BugSQLiteHelper.COLUMN_ID)),
                 cursor.getString(cursor.getColumnIndex(BugSQLiteHelper.COLUMN_BUG_ID)),
                 Language.valueOf(cursor.getString(cursor.getColumnIndex(BugSQLiteHelper.COLUMN_LANGUAGE))),
                 cursor.getString(cursor.getColumnIndex(BugSQLiteHelper.COLUMN_SOURCE_CODE))
