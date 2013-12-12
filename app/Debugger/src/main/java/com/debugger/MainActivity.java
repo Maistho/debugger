@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -148,7 +149,8 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .remove(fragmentManager.findFragmentByTag("downloadProgressBar"))
                 .commit();
-        swapMainFragment(BugpickerFragment.newInstance());
+//        swapMainFragment(BugpickerFragment.newInstance());
+        Toast.makeText(this, "Connection Timeout", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -182,7 +184,6 @@ public class MainActivity extends ActionBarActivity
                         SubmitterFragment.newInstance(bug),
                         "submitProgressBar")
                 .commit();
-        //Toast.makeText(this, "Submit code - NYI", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -202,6 +203,8 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .remove(fragmentManager.findFragmentByTag("submitProgressBar"))
                 .commit();
+
+        Toast.makeText(this, "Connection Timeout", Toast.LENGTH_SHORT).show();
     }
 
 }
