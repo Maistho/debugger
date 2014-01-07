@@ -12,6 +12,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.json.JSONObject;
+import com.vessel.VesselSDK;
+import com.vessel.VesselAB;
+import com.vessel.enums.VesselEnums;
+import com.vessel.interfaces.ABListener;
 
 public class MainActivity extends ActionBarActivity
         implements
@@ -36,6 +40,28 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialise Vessel
+        VesselSDK.initialize(getApplicationContext(), "WHQySVJEMXdCS2JTZHJRRjA2NHNWcXVl");
+        VesselAB.reloadTest();
+        VesselAB.setABListener(new ABListener() {
+            @Override
+            public void testLoading() {
+
+            }
+
+            @Override
+            public void testLoaded(String s, VesselEnums.TestVariation testVariation) {
+
+            }
+
+            @Override
+            public void testNotAvailable(VesselEnums.TestVariation testVariation) {
+                //Show default screen
+            }
+        });
+
+
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -54,6 +80,18 @@ public class MainActivity extends ActionBarActivity
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
+    }
+
+    @Override
+    protected void onPause() {
+        VesselAB.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        VesselAB.onResume();
+        super.onResume();
     }
 
     @Override
@@ -105,7 +143,11 @@ public class MainActivity extends ActionBarActivity
 
         switch (position) {
             case NEW_BUG:
-                fragment = BugpickerFragment.newInstance();
+                if(VesselAB.whichVariation() == VesselEnums.TestVariation.B){
+                    fragment = BugpickerFragment_B.newInstance();
+                }else{
+                    fragment = BugpickerFragment.newInstance();
+                }
                 swapMainFragment(fragment);
                 break;
             case RESUME_BUG:

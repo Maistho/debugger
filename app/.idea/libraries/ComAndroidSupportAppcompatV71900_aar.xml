@@ -4,6 +4,7 @@
       <root url="jar://$PROJECT_DIR$/Debugger/build/exploded-bundles/ComAndroidSupportAppcompatV71900.aar/classes.jar!/" />
       <root url="jar://$PROJECT_DIR$/Debugger/build/exploded-bundles/ComAndroidSupportAppcompatV71900.aar/classes.jar!/" />
       <root url="jar://$PROJECT_DIR$/Debugger/build/exploded-bundles/ComAndroidSupportAppcompatV71900.aar/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/Debugger/build/exploded-bundles/ComAndroidSupportAppcompatV71900.aar/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

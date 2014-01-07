@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="vesselsdk">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Debugger/libs/vesselsdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

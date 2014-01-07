@@ -9,22 +9,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
-//import android.widget.Switch;
 import android.widget.ToggleButton;
 
+//import android.widget.Switch;
 
 
 /**
  * Fragment containing the bugpicker view
  */
-public class BugpickerFragment extends Fragment
+public class BugpickerFragment_B extends Fragment
         implements View.OnClickListener {
     private static final String TITLE = "New Bug";
     private BugpickerListener callback; //callback to activity
 
 
-    public static BugpickerFragment newInstance() {
-        return new BugpickerFragment();
+    public static BugpickerFragment_B newInstance() {
+        return new BugpickerFragment_B();
     }
 
 
@@ -59,7 +59,7 @@ public class BugpickerFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View rootView = inflater.inflate(R.layout.fragment_bugpicker, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_bugpicker_b, container, false);
 
         Spinner language_spinner = (Spinner) rootView.findViewById(R.id.language_spinner);
         ArrayAdapter<Language> languageArrayAdapter = new ArrayAdapter<Language>(
